@@ -7,14 +7,79 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/loadingText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Loading..."
+    <ImageView
+        android:id="@+id/splashBackgroundImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/splash_health_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/splashContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="420dp">
+
+        <FrameLayout
+            android:id="@+id/splashLogoContainer"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
+            android:background="@drawable/splash_logo_background">
+
+            <ImageView
+                android:id="@+id/splashLogoImage"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_splash_wellness" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/splashTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@color/splash_text_primary"
+            android:textSize="32sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/splashSubtitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:text="Your daily health companion"
+            android:textColor="@color/splash_text_secondary"
+            android:textSize="17sp" />
+
+        <ProgressBar
+            android:id="@+id/splashProgressBar"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="24dp"
+            android:indeterminateTint="@color/splash_mint" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
