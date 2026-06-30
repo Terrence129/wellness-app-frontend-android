@@ -2,12 +2,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/loginRoot"
+    android:id="@+id/registerRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/health_background"
     android:fillViewport="true"
-    tools:context=".ui.auth.LoginActivity">
+    tools:context=".ui.auth.RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
         android:paddingBottom="42dp">
 
         <TextView
-            android:id="@+id/loginBrandText"
+            android:id="@+id/registerBrandText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
@@ -29,26 +29,26 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/loginTitleText"
+            android:id="@+id/registerTitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="34dp"
-            android:text="@string/auth_welcome_title"
+            android:text="@string/auth_register_title"
             android:textColor="@color/health_text_primary"
             android:textSize="34sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/loginSubtitleText"
+            android:id="@+id/registerSubtitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/auth_welcome_subtitle"
+            android:text="@string/auth_register_subtitle"
             android:textColor="@color/health_text_secondary"
             android:textSize="16sp" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/loginCard"
+            android:id="@+id/registerCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
@@ -64,7 +64,7 @@
                 android:padding="22dp">
 
                 <TextView
-                    android:id="@+id/loginCardLabel"
+                    android:id="@+id/registerCardLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/auth_card_label"
@@ -73,15 +73,31 @@
                     android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/loginEmailLayout"
+                    android:id="@+id/registerUsernameLayout"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
+                    android:hint="@string/auth_username">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/registerUsernameInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/registerEmailLayout"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
                     android:hint="@string/auth_email">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/loginEmailInput"
+                        android:id="@+id/registerEmailInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
@@ -89,7 +105,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/loginPasswordLayout"
+                    android:id="@+id/registerPasswordLayout"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,7 +114,24 @@
                     app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/loginPasswordInput"
+                        android:id="@+id/registerPasswordInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/registerConfirmPasswordLayout"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:hint="@string/auth_confirm_password"
+                    app:endIconMode="password_toggle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/registerConfirmPasswordInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
@@ -106,7 +139,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:id="@+id/loginErrorText"
+                    android:id="@+id/registerErrorText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
@@ -115,7 +148,7 @@
                     android:visibility="gone" />
 
                 <ProgressBar
-                    android:id="@+id/loginProgressBar"
+                    android:id="@+id/registerProgressBar"
                     style="?android:attr/progressBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -125,22 +158,22 @@
                     android:visibility="gone" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/loginButton"
+                    android:id="@+id/registerButton"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginTop="18dp"
-                    android:text="@string/auth_login"
+                    android:text="@string/auth_register"
                     android:textAllCaps="false"
                     app:backgroundTint="@color/health_mint"
                     app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/goToRegisterButton"
+                    android:id="@+id/backToLoginButton"
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginTop="6dp"
-                    android:text="@string/auth_go_to_register"
+                    android:text="@string/auth_back_to_login"
                     android:textAllCaps="false"
                     android:textColor="@color/health_blue" />
             </LinearLayout>

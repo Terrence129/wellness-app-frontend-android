@@ -6,4 +6,12 @@
     <color name="splash_text_primary">#3F6F63</color>
     <color name="splash_text_secondary">#668B80</color>
     <color name="splash_logo_background">#EAF7F2</color>
+    <color name="health_background">#F2F3F7</color>
+    <color name="health_card">#FFFFFFFF</color>
+    <color name="health_text_primary">#111111</color>
+    <color name="health_text_secondary">#7A7D83</color>
+    <color name="health_mint">#4E9F87</color>
+    <color name="health_blue">#0A84FF</color>
+    <color name="health_orange">#FF4B12</color>
+    <color name="health_error">#B3261E</color>
 </resources>

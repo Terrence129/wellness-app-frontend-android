@@ -13,5 +13,7 @@ data class LoginRequest(
 
 data class LoginResponse(
     val token: String,
+    val tokenType: String = "Bearer",
+    val expiresAt: String? = null,
     val user: UserResponse
 )
