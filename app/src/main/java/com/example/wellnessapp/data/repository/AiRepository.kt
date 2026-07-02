@@ -4,7 +4,6 @@ import android.content.Context
 import com.example.wellnessapp.data.model.AiAdviceRequest
 import com.example.wellnessapp.data.model.AiAdviceResponse
 import com.example.wellnessapp.data.model.ApiResponse
-import com.example.wellnessapp.data.model.ChatMessageResponse
 import com.example.wellnessapp.data.model.ChatRequest
 import com.example.wellnessapp.data.model.ChatResponse
 import com.example.wellnessapp.data.network.RetrofitClient
@@ -27,7 +26,4 @@ class AiRepository(context: Context) {
         return apiService.sendChatMessage(request)
     }
 
-    suspend fun getChatHistory(limit: Int? = null): ApiResponse<List<ChatMessageResponse>> {
-        return apiService.getChatHistory(limit)
-    }
 }
