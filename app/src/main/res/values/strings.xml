@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">WellnessApp</string>
+    <string name="auth_welcome_title">Welcome back</string>
+    <string name="auth_welcome_subtitle">Track your daily wellness with SimpleWell.</string>
+    <string name="auth_register_title">Create account</string>
+    <string name="auth_register_subtitle">Start saving your wellness records securely.</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_username">Username</string>
+    <string name="auth_confirm_password">Confirm password</string>
+    <string name="auth_login">Login</string>
+    <string name="auth_register">Register</string>
+    <string name="auth_go_to_register">Create a new account</string>
+    <string name="auth_back_to_login">Back to Login</string>
+    <string name="auth_card_label">Daily wellness account</string>
 </resources>

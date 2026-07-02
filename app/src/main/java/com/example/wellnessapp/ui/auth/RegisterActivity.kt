@@ -8,24 +8,25 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.wellnessapp.R
-import com.example.wellnessapp.ui.home.HomeActivity
 import com.example.wellnessapp.util.UiState
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
-class LoginActivity : AppCompatActivity() {
-    private val viewModel: LoginViewModel by viewModels()
+class RegisterActivity : AppCompatActivity() {
+    private val viewModel: RegisterViewModel by viewModels()
 
+    private lateinit var usernameInput: TextInputEditText
     private lateinit var emailInput: TextInputEditText
     private lateinit var passwordInput: TextInputEditText
-    private lateinit var loginButton: MaterialButton
+    private lateinit var confirmPasswordInput: TextInputEditText
     private lateinit var registerButton: MaterialButton
+    private lateinit var backToLoginButton: MaterialButton
     private lateinit var errorText: TextView
     private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_register)
 
         bindViews()
         bindActions()
@@ -33,24 +34,28 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun bindViews() {
-        emailInput = findViewById(R.id.loginEmailInput)
-        passwordInput = findViewById(R.id.loginPasswordInput)
-        loginButton = findViewById(R.id.loginButton)
-        registerButton = findViewById(R.id.goToRegisterButton)
-        errorText = findViewById(R.id.loginErrorText)
-        progressBar = findViewById(R.id.loginProgressBar)
+        usernameInput = findViewById(R.id.registerUsernameInput)
+        emailInput = findViewById(R.id.registerEmailInput)
+        passwordInput = findViewById(R.id.registerPasswordInput)
+        confirmPasswordInput = findViewById(R.id.registerConfirmPasswordInput)
+        registerButton = findViewById(R.id.registerButton)
+        backToLoginButton = findViewById(R.id.backToLoginButton)
+        errorText = findViewById(R.id.registerErrorText)
+        progressBar = findViewById(R.id.registerProgressBar)
     }
 
     private fun bindActions() {
-        loginButton.setOnClickListener {
-            viewModel.login(
+        registerButton.setOnClickListener {
+            viewModel.register(
+                username = usernameInput.text?.toString().orEmpty(),
                 email = emailInput.text?.toString().orEmpty(),
-                password = passwordInput.text?.toString().orEmpty()
+                password = passwordInput.text?.toString().orEmpty(),
+                confirmPassword = confirmPasswordInput.text?.toString().orEmpty()
             )
         }
 
-        registerButton.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
+        backToLoginButton.setOnClickListener {
+            openLogin()
         }
     }
 
@@ -68,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                 errorText.visibility = View.GONE
                 setLoading(true)
             }
-            is UiState.Success -> openHome()
+            is UiState.Success -> openLogin()
             is UiState.Error -> {
                 setLoading(false)
                 errorText.text = state.message
@@ -79,13 +84,13 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setLoading(isLoading: Boolean) {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        loginButton.isEnabled = !isLoading
         registerButton.isEnabled = !isLoading
+        backToLoginButton.isEnabled = !isLoading
     }
 
-    private fun openHome() {
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    private fun openLogin() {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
         finish()
