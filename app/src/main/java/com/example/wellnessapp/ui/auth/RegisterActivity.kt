@@ -1,3 +1,9 @@
+/*
+ * Author: Lei Tianyou
+ * Role: Member D
+ * Scope: Login and registration flow
+ */
+
 package com.example.wellnessapp.ui.auth
 
 import android.content.Intent
