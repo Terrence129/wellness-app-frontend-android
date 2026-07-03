@@ -1,3 +1,5 @@
+// Team5
+// Author: Chen Chen
 package com.example.wellnessapp.ui.log
 
 import android.app.DatePickerDialog
