@@ -3,7 +3,6 @@ package com.example.wellnessapp.data.network
 import com.example.wellnessapp.data.model.AiAdviceRequest
 import com.example.wellnessapp.data.model.AiAdviceResponse
 import com.example.wellnessapp.data.model.ApiResponse
-import com.example.wellnessapp.data.model.ChatMessageResponse
 import com.example.wellnessapp.data.model.ChatRequest
 import com.example.wellnessapp.data.model.ChatResponse
 import com.example.wellnessapp.data.model.LoginRequest
@@ -83,8 +82,4 @@ interface ApiService {
         @Body request: ChatRequest
     ): ApiResponse<ChatResponse>
 
-    @GET("ai/chat/history")
-    suspend fun getChatHistory(
-        @Query("limit") limit: Int?
-    ): ApiResponse<List<ChatMessageResponse>>
 }
