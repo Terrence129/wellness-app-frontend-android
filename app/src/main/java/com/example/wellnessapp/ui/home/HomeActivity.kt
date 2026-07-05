@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +24,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.launch
+import com.example.wellnessapp.ui.ai.AiAdviceActivity
+import com.example.wellnessapp.ui.ai.ChatbotActivity
+import com.example.wellnessapp.ui.summary.WeeklySummaryActivity
 
 /**
  * Home screen for the SimpleWell Android app.
@@ -88,22 +90,36 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
         findViewById<Button>(R.id.btnWeeklySummary).setOnClickListener {
-            showFeatureUnavailable()
+            startActivity(
+                Intent(
+                    this,
+                    WeeklySummaryActivity::class.java
+                )
+            )
         }
+
         findViewById<Button>(R.id.btnAiAdvice).setOnClickListener {
-            showFeatureUnavailable()
+            startActivity(
+                Intent(
+                    this,
+                    AiAdviceActivity::class.java
+                )
+            )
         }
+
         findViewById<Button>(R.id.btnChatbot).setOnClickListener {
-            showFeatureUnavailable()
+            startActivity(
+                Intent(
+                    this,
+                    ChatbotActivity::class.java
+                )
+            )
         }
         findViewById<Button>(R.id.btnLogout).setOnClickListener {
             logout()
         }
     }
 
-    private fun showFeatureUnavailable() {
-        Toast.makeText(this, "This feature is not available yet.", Toast.LENGTH_SHORT).show()
-    }
 
     private fun observeViewModel() {
         viewModel.uiState.observe(this) { state ->
