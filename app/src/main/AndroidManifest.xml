@@ -17,13 +17,13 @@
 
         <activity
             android:name=".ui.ai.ChatbotActivity"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="adjustResize" /><activity
             android:name=".ui.ai.AiAdviceActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".ui.summary.WeeklySummaryActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".ui.home.HomeActivity"
             android:exported="false"
