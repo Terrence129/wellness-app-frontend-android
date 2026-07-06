@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.wellnessapp.R
 import com.example.wellnessapp.data.model.WeeklySummaryResponse
 import com.example.wellnessapp.util.UiState
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
 
 /**
@@ -62,19 +60,9 @@ class WeeklySummaryActivity : AppCompatActivity() {
     }
 
     private fun prepareDefaultDateRange() {
-        val formatter =
-            SimpleDateFormat("yyyy-MM-dd", Locale.US)
-
-        val endCalendar = Calendar.getInstance()
-        val startCalendar = endCalendar.clone() as Calendar
-
-        // Including today gives a total range of seven days.
-        startCalendar.add(Calendar.DAY_OF_YEAR, -6)
-
-        startDate = formatter.format(startCalendar.time)
-        endDate = formatter.format(endCalendar.time)
-
-        tvDateRange.text = "$startDate to $endDate"
+        startDate = ""
+        endDate = ""
+        tvDateRange.text = "Latest available week"
     }
 
     private fun observeSummaryState() {
