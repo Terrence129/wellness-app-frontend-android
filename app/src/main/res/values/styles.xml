@@ -28,4 +28,8 @@
         <item name="android:scaleType">center</item>
         <item name="android:src">@drawable/ic_back_arrow</item>
     </style>
+
+    <style name="Widget.Wellness.MaterialButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/classic_gray</item>
+    </style>
 </resources>

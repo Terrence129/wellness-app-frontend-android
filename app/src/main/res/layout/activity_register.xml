@@ -146,6 +146,7 @@
                     android:layout_marginTop="18dp"
                     android:text="@string/auth_register"
                     android:textAllCaps="false"
+                    android:background="@drawable/bg_primary_button"
                     app:backgroundTint="@null"
                     app:cornerRadius="28dp" />
 

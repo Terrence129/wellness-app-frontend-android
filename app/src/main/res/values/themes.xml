@@ -6,6 +6,7 @@
         <item name="colorSecondary">@color/health_blue</item>
         <item name="colorSurface">@color/health_card</item>
         <item name="colorError">@color/health_error</item>
+        <item name="materialButtonStyle">@style/Widget.Wellness.MaterialButton</item>
     </style>
 
     <style name="Theme.WellnessApp" parent="Base.Theme.WellnessApp" />
