@@ -2,6 +2,6 @@
 <!-- Team5 -->
 <!-- Author: Chen Chen -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#0A84FF" />
+    <solid android:color="@color/function_button_background" />
     <corners android:radius="28dp" />
 </shape>

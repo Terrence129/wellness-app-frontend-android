@@ -59,11 +59,11 @@ class WellnessLogAdapter(
         fun bind(log: WellnessLogResponse) {
             val context = itemView.context
             dateText.text = log.logDate
-            sleepText.text = context.getString(R.string.member_f_sleep_hours_format, formatDecimal(log.sleepHours))
-            moodText.text = context.getString(R.string.member_f_mood_score_format, log.moodScore?.toString() ?: "--")
-            waterText.text = context.getString(R.string.member_f_water_cups_format, log.waterCups?.toString() ?: "--")
-            stepsText.text = context.getString(R.string.member_f_steps_format, log.steps?.toString() ?: "--")
-            exerciseText.text = context.getString(R.string.member_f_exercise_minutes_format, log.exerciseMinutes?.toString() ?: "--")
+            sleepText.text = context.getString(R.string.sleep_hours_format, formatDecimal(log.sleepHours))
+            moodText.text = context.getString(R.string.mood_score_format, log.moodScore?.toString() ?: "--")
+            waterText.text = context.getString(R.string.water_cups_format, log.waterCups?.toString() ?: "--")
+            stepsText.text = context.getString(R.string.steps_format, log.steps?.toString() ?: "--")
+            exerciseText.text = context.getString(R.string.exercise_minutes_format, log.exerciseMinutes?.toString() ?: "--")
             itemView.setOnClickListener { onItemClick(log) }
         }
 

@@ -2,9 +2,10 @@
 <!-- Team5
      Author: 罗钰翔 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/member_f_screen_bg"
+    android:background="@drawable/bg_screen"
     android:orientation="vertical"
     android:paddingStart="18dp"
     android:paddingTop="34dp"
@@ -15,16 +16,21 @@
         android:layout_width="match_parent"
         android:layout_height="52dp">
 
-        <Button
+        <ImageButton
             android:id="@+id/btnHistoryBack"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_gravity="start|center_vertical"
-            android:background="@drawable/member_f_circle_button"
-            android:text="‹"
-            android:textAllCaps="false"
-            android:textColor="#111111"
-            android:textSize="30sp" />
+            android:background="@drawable/bg_back_button"
+            android:backgroundTint="@null"
+            android:contentDescription="Back"
+            android:elevation="2dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="10dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_back_arrow"
+            app:tint="#111111" />
 
         <TextView
             android:layout_width="match_parent"
@@ -56,7 +62,7 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:background="@drawable/member_f_filter_input"
+            android:background="@drawable/bg_filter_input"
             android:hint="Start"
             android:inputType="date"
             android:paddingStart="14dp"
@@ -72,7 +78,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:background="@drawable/member_f_filter_input"
+            android:background="@drawable/bg_filter_input"
             android:hint="End"
             android:inputType="date"
             android:paddingStart="14dp"
@@ -88,12 +94,14 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/member_f_primary_button"
+        android:background="@drawable/bg_primary_button"
+        android:backgroundTint="@null"
         android:text="Apply Filter"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/function_button_text"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:backgroundTint="@null" />
 
     <ProgressBar
         android:id="@+id/progressHistory"
@@ -108,9 +116,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:background="@drawable/member_f_danger_button"
+        android:background="@drawable/bg_delete_button"
         android:padding="12dp"
-        android:textColor="#B42318"
+        android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:visibility="gone" />
 
@@ -119,7 +127,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
-        android:background="@drawable/member_f_card"
+        android:background="@drawable/bg_card"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="24dp"
@@ -130,7 +138,7 @@
             android:layout_height="150dp"
             android:contentDescription="Empty wellness history illustration"
             android:scaleType="centerCrop"
-            android:src="@drawable/member_f_empty_state" />
+            android:src="@drawable/empty_state" />
 
         <TextView
             android:layout_width="match_parent"

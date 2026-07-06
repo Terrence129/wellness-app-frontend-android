@@ -2,6 +2,7 @@
 <!-- Team5 -->
 <!-- Author: Chen Chen -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F2F2F7"
@@ -87,10 +88,12 @@
                     android:layout_height="52dp"
                     android:layout_marginStart="12dp"
                     android:background="@drawable/bg_primary_button"
+                    android:backgroundTint="@null"
                     android:text="Pick"
                     android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textColor="@color/function_button_text"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null" />
             </LinearLayout>
         </LinearLayout>
 
@@ -273,23 +276,27 @@
             android:layout_height="56dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/bg_primary_button"
+            android:backgroundTint="@null"
             android:text="Submit"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/function_button_text"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:backgroundTint="@null" />
 
         <Button
             android:id="@+id/buttonCancelLog"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/bg_secondary_button"
+            android:background="@drawable/bg_primary_button"
+            android:backgroundTint="@null"
             android:text="Cancel"
             android:textAllCaps="false"
-            android:textColor="#111111"
+            android:textColor="@color/function_button_text"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:backgroundTint="@null" />
 
     </LinearLayout>
 </ScrollView>

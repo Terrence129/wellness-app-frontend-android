@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:background="@drawable/member_f_card"
+    android:background="@drawable/bg_card"
     android:clickable="true"
     android:focusable="true"
     android:orientation="horizontal"
@@ -81,5 +81,5 @@
         android:layout_marginStart="12dp"
         android:contentDescription="Mini wellness chart"
         android:scaleType="centerCrop"
-        android:src="@drawable/member_f_detail_chart" />
+        android:src="@drawable/detail_chart" />
 </LinearLayout>

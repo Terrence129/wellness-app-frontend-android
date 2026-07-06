@@ -55,7 +55,7 @@ class AiAdviceActivity : AppCompatActivity() {
     }
 
     private fun setClickListeners() {
-        findViewById<Button>(R.id.btnBack).setOnClickListener {
+        findViewById<View>(R.id.btnBack).setOnClickListener {
             finish()
         }
 
