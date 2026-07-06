@@ -83,7 +83,7 @@ class HistoryActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnApplyFilter).setOnClickListener {
             loadLogs()
         }
-        findViewById<Button>(R.id.btnHistoryBack).setOnClickListener {
+        findViewById<View>(R.id.btnHistoryBack).setOnClickListener {
             finish()
         }
     }

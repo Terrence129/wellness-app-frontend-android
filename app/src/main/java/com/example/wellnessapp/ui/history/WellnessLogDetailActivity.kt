@@ -81,7 +81,7 @@ class WellnessLogDetailActivity : AppCompatActivity() {
     }
 
     private fun setupActions() {
-        findViewById<Button>(R.id.btnDetailBack).setOnClickListener {
+        findViewById<View>(R.id.btnDetailBack).setOnClickListener {
             openHistory()
         }
 
@@ -140,12 +140,12 @@ class WellnessLogDetailActivity : AppCompatActivity() {
         currentLogDate = log.logDate
         currentLog = log
         dateText.text = log.logDate
-        sleepText.text = getString(R.string.member_f_sleep_hours_format, formatDecimal(log.sleepHours))
-        moodText.text = getString(R.string.member_f_mood_score_format, log.moodScore?.toString() ?: "--")
-        waterText.text = getString(R.string.member_f_water_cups_format, log.waterCups?.toString() ?: "--")
-        stepsText.text = getString(R.string.member_f_steps_format, log.steps?.toString() ?: "--")
-        exerciseText.text = getString(R.string.member_f_exercise_minutes_format, log.exerciseMinutes?.toString() ?: "--")
-        noteText.text = log.note?.takeIf { it.isNotBlank() } ?: getString(R.string.member_f_home_no_note)
+        sleepText.text = getString(R.string.sleep_hours_format, formatDecimal(log.sleepHours))
+        moodText.text = getString(R.string.mood_score_format, log.moodScore?.toString() ?: "--")
+        waterText.text = getString(R.string.water_cups_format, log.waterCups?.toString() ?: "--")
+        stepsText.text = getString(R.string.steps_format, log.steps?.toString() ?: "--")
+        exerciseText.text = getString(R.string.exercise_minutes_format, log.exerciseMinutes?.toString() ?: "--")
+        noteText.text = log.note?.takeIf { it.isNotBlank() } ?: getString(R.string.home_no_note)
     }
 
     private fun showError(message: String) {
@@ -164,10 +164,10 @@ class WellnessLogDetailActivity : AppCompatActivity() {
         }
 
         AlertDialog.Builder(this)
-            .setTitle(R.string.member_f_delete_log_title)
-            .setMessage(R.string.member_f_delete_log_message)
-            .setPositiveButton(R.string.member_f_delete) { _, _ -> deleteLog() }
-            .setNegativeButton(R.string.member_f_cancel, null)
+            .setTitle(R.string.delete_log_title)
+            .setMessage(R.string.delete_log_message)
+            .setPositiveButton(R.string.delete) { _, _ -> deleteLog() }
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 

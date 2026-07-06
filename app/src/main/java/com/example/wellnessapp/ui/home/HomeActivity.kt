@@ -83,13 +83,13 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupActions() {
-        findViewById<Button>(R.id.btnAddLog).setOnClickListener {
+        findViewById<View>(R.id.btnAddLog).setOnClickListener {
             startActivity(Intent(this, AddWellnessLogActivity::class.java))
         }
-        findViewById<Button>(R.id.btnHistory).setOnClickListener {
+        findViewById<View>(R.id.btnHistory).setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
-        findViewById<Button>(R.id.btnWeeklySummary).setOnClickListener {
+        findViewById<View>(R.id.btnWeeklySummary).setOnClickListener {
             startActivity(
                 Intent(
                     this,
@@ -98,7 +98,7 @@ class HomeActivity : AppCompatActivity() {
             )
         }
 
-        findViewById<Button>(R.id.btnAiAdvice).setOnClickListener {
+        findViewById<View>(R.id.btnAiAdvice).setOnClickListener {
             startActivity(
                 Intent(
                     this,
@@ -107,7 +107,7 @@ class HomeActivity : AppCompatActivity() {
             )
         }
 
-        findViewById<Button>(R.id.btnChatbot).setOnClickListener {
+        findViewById<View>(R.id.btnChatbot).setOnClickListener {
             startActivity(
                 Intent(
                     this,
@@ -139,7 +139,7 @@ class HomeActivity : AppCompatActivity() {
     private fun showHome(state: HomeUiState.Success) {
         progressBar.visibility = View.GONE
         errorText.visibility = View.GONE
-        welcomeText.text = getString(R.string.member_f_home_welcome_format, state.user.username)
+        welcomeText.text = getString(R.string.home_welcome_format, state.user.username)
         todayDateText.text = state.today
         renderTodayLog(state.todayLog)
     }
@@ -152,23 +152,23 @@ class HomeActivity : AppCompatActivity() {
 
     private fun renderTodayLog(log: WellnessLogResponse?) {
         if (log == null) {
-            statusText.text = getString(R.string.member_f_home_no_log_today)
-            sleepText.text = getString(R.string.member_f_metric_empty)
-            moodText.text = getString(R.string.member_f_metric_empty)
-            waterText.text = getString(R.string.member_f_metric_empty)
-            stepsText.text = getString(R.string.member_f_metric_empty)
-            exerciseText.text = getString(R.string.member_f_metric_empty)
-            noteText.text = getString(R.string.member_f_home_no_note)
+            statusText.text = getString(R.string.home_no_log_today)
+            sleepText.text = getString(R.string.metric_empty)
+            moodText.text = getString(R.string.metric_empty)
+            waterText.text = getString(R.string.metric_empty)
+            stepsText.text = getString(R.string.metric_empty)
+            exerciseText.text = getString(R.string.metric_empty)
+            noteText.text = getString(R.string.home_no_note)
             return
         }
 
-        statusText.text = getString(R.string.member_f_home_log_ready)
-        sleepText.text = getString(R.string.member_f_sleep_hours_format, formatDecimal(log.sleepHours))
-        moodText.text = getString(R.string.member_f_mood_score_format, log.moodScore?.toString() ?: "--")
-        waterText.text = getString(R.string.member_f_water_cups_format, log.waterCups?.toString() ?: "--")
-        stepsText.text = getString(R.string.member_f_steps_format, log.steps?.toString() ?: "--")
-        exerciseText.text = getString(R.string.member_f_exercise_minutes_format, log.exerciseMinutes?.toString() ?: "--")
-        noteText.text = log.note?.takeIf { it.isNotBlank() } ?: getString(R.string.member_f_home_no_note)
+        statusText.text = getString(R.string.home_log_ready)
+        sleepText.text = getString(R.string.sleep_hours_format, formatDecimal(log.sleepHours))
+        moodText.text = getString(R.string.mood_score_format, log.moodScore?.toString() ?: "--")
+        waterText.text = getString(R.string.water_cups_format, log.waterCups?.toString() ?: "--")
+        stepsText.text = getString(R.string.steps_format, log.steps?.toString() ?: "--")
+        exerciseText.text = getString(R.string.exercise_minutes_format, log.exerciseMinutes?.toString() ?: "--")
+        noteText.text = log.note?.takeIf { it.isNotBlank() } ?: getString(R.string.home_no_note)
     }
 
     private fun logout() {

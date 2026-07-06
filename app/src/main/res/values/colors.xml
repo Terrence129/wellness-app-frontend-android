@@ -12,6 +12,8 @@
     <color name="health_text_secondary">#7A7D83</color>
     <color name="health_mint">#4E9F87</color>
     <color name="health_blue">#0A84FF</color>
+    <color name="function_button_background">#0A84FF</color>
+    <color name="function_button_text">#FFFFFFFF</color>
     <color name="health_orange">#FF4B12</color>
     <color name="health_error">#B3261E</color>
 </resources>

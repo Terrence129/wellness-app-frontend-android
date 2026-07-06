@@ -68,7 +68,7 @@ class ChatbotActivity : AppCompatActivity() {
     }
 
     private fun bindActions() {
-        findViewById<Button>(R.id.btnBack)
+        findViewById<View>(R.id.btnBack)
             .setOnClickListener {
                 finish()
             }
