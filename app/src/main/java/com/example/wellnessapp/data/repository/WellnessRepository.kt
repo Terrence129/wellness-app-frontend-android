@@ -21,7 +21,8 @@ class WellnessRepository(context: Context) {
         startDate: String? = null,
         endDate: String? = null
     ): ApiResponse<List<WellnessLogResponse>> {
-        return apiService.getWellnessLogs(startDate, endDate)
+        val response = apiService.getWellnessLogs(startDate, endDate)
+        return ApiResponse(response.success, response.message, response.data?.content)
     }
 
     suspend fun getWellnessLogByDate(logDate: String): ApiResponse<WellnessLogResponse> {

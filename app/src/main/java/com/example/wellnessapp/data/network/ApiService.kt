@@ -7,6 +7,7 @@ import com.example.wellnessapp.data.model.ChatRequest
 import com.example.wellnessapp.data.model.ChatResponse
 import com.example.wellnessapp.data.model.LoginRequest
 import com.example.wellnessapp.data.model.LoginResponse
+import com.example.wellnessapp.data.model.PageResponse
 import com.example.wellnessapp.data.model.RegisterRequest
 import com.example.wellnessapp.data.model.UserResponse
 import com.example.wellnessapp.data.model.WeeklySummaryResponse
@@ -45,7 +46,7 @@ interface ApiService {
     suspend fun getWellnessLogs(
         @Query("startDate") startDate: String?,
         @Query("endDate") endDate: String?
-    ): ApiResponse<List<WellnessLogResponse>>
+    ): ApiResponse<PageResponse<WellnessLogResponse>>
 
     @GET("wellness-logs/date/{logDate}")
     suspend fun getWellnessLogByDate(

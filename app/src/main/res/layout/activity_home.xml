@@ -22,14 +22,33 @@
             android:paddingEnd="20dp"
             android:paddingBottom="20dp">
 
-            <TextView
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Summary"
-                android:textColor="#111111"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_height="44dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Summary"
+                    android:textColor="#111111"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="86dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:background="@drawable/member_f_logout_button"
+                    android:backgroundTint="@null"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:text="Logout"
+                    android:textAllCaps="false"
+                    android:textColor="#FF3B30"
+                    android:textSize="14sp" />
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/tvWelcome"
@@ -209,6 +228,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/member_f_pill"
+                android:backgroundTint="@null"
                 android:gravity="center_vertical"
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
@@ -223,6 +243,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/member_f_pill"
+                android:backgroundTint="@null"
                 android:gravity="center_vertical"
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
@@ -236,10 +257,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="18dp"
-                android:background="@drawable/member_f_primary_button"
+                android:background="@drawable/member_f_secondary_button"
+                android:backgroundTint="@null"
                 android:text="Add Wellness Log"
                 android:textAllCaps="false"
-                android:textColor="#FFFFFF"
+                android:textColor="#111111"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -255,6 +277,7 @@
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:background="@drawable/member_f_secondary_button"
+                    android:backgroundTint="@null"
                     android:text="AI Advice"
                     android:textAllCaps="false"
                     android:textColor="#111111"
@@ -267,22 +290,13 @@
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/member_f_secondary_button"
+                    android:backgroundTint="@null"
                     android:text="Chatbot"
                     android:textAllCaps="false"
                     android:textColor="#111111"
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btnLogout"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/member_f_danger_button"
-                android:text="Logout"
-                android:textAllCaps="false"
-                android:textColor="#D64E25"
-                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

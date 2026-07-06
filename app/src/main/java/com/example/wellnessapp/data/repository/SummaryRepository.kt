@@ -13,6 +13,9 @@ class SummaryRepository(context: Context) {
         startDate: String? = null,
         endDate: String? = null
     ): ApiResponse<WeeklySummaryResponse> {
-        return apiService.getWeeklySummary(startDate, endDate)
+        return apiService.getWeeklySummary(
+            startDate?.takeIf { it.isNotBlank() },
+            endDate?.takeIf { it.isNotBlank() }
+        )
     }
 }
