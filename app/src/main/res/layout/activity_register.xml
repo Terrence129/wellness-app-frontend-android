@@ -20,15 +20,6 @@
         android:paddingBottom="42dp">
 
         <TextView
-            android:id="@+id/registerBrandText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textColor="@color/splash_text_primary"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/registerTitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,15 +53,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="22dp">
-
-                <TextView
-                    android:id="@+id/registerCardLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/auth_card_label"
-                    android:textColor="@color/health_orange"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/registerUsernameLayout"
@@ -164,7 +146,7 @@
                     android:layout_marginTop="18dp"
                     android:text="@string/auth_register"
                     android:textAllCaps="false"
-                    app:backgroundTint="@color/health_mint"
+                    app:backgroundTint="@null"
                     app:cornerRadius="28dp" />
 
                 <com.google.android.material.button.MaterialButton
