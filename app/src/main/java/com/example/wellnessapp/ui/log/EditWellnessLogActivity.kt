@@ -92,6 +92,7 @@ class `EditWellnessLogActivity` : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
         buttonUpdateLog.setOnClickListener {
             viewModel.updateLog(
                 id = logId,

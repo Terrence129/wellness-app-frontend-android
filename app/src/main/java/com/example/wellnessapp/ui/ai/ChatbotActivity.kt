@@ -1,6 +1,9 @@
 package com.example.wellnessapp.ui.ai
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -73,6 +76,30 @@ class ChatbotActivity : AppCompatActivity() {
                 finish()
             }
 
+        updateSendButtonTint()
+
+        messageInput.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) = Unit
+
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int
+                ) {
+                    updateSendButtonTint()
+                }
+
+                override fun afterTextChanged(s: Editable?) = Unit
+            }
+        )
+
         sendButton.setOnClickListener {
             submitMessage()
         }
@@ -98,6 +125,18 @@ class ChatbotActivity : AppCompatActivity() {
                 viewModel.clearError()
             }
         }
+    }
+
+    private fun updateSendButtonTint() {
+        val color =
+            if (messageInput.text.isNullOrBlank()) {
+                R.color.classic_gray
+            } else {
+                R.color.send_active_green
+            }
+
+        sendButton.backgroundTintList =
+            ColorStateList.valueOf(getColor(color))
     }
 
     private fun submitMessage() {

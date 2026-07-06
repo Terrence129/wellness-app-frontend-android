@@ -77,6 +77,7 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
         buttonPickDate.setOnClickListener { showDatePicker() }
         inputLogDate.setOnClickListener { showDatePicker() }
 

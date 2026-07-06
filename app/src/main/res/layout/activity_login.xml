@@ -20,15 +20,6 @@
         android:paddingBottom="42dp">
 
         <TextView
-            android:id="@+id/loginBrandText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textColor="@color/splash_text_primary"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/loginTitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,16 +53,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="22dp">
-
-                <TextView
-                    android:id="@+id/loginCardLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/auth_card_label"
-                    android:textColor="@color/health_orange"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/loginEmailLayout"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"

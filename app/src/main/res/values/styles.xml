@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="WellnessHeaderBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+    </style>
+
+    <style name="WellnessHeaderTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:textColor">@color/health_text_primary</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="WellnessBackButton">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:background">@drawable/bg_back_button</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:contentDescription">Back</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:src">@drawable/ic_back_arrow</item>
+    </style>
+
+    <style name="Widget.Wellness.MaterialButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/classic_gray</item>
+    </style>
+</resources>
