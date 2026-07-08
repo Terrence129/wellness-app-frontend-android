@@ -8,78 +8,86 @@
     android:background="@drawable/bg_card"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="16dp">
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/tvItemDate"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:text="2026-06-24"
+        android:textColor="#111111"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvItemDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="2026-06-24"
-            android:textColor="#111111"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvItemSleep"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card_subtle"
+            android:padding="12dp"
             android:text="Sleep: -- h"
-            android:textColor="#111111"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvItemMood"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Mood: -- / 5"
-            android:textColor="#6F7078"
+            android:textColor="#34343A"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/tvItemWater"
-            android:layout_width="match_parent"
+            android:id="@+id/tvItemMood"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card_subtle"
+            android:padding="12dp"
+            android:text="Mood: -- / 5"
+            android:textColor="#34343A"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvItemWater"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card_subtle"
+            android:padding="12dp"
             android:text="Water: -- cups"
-            android:textColor="#6F7078"
+            android:textColor="#34343A"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvItemSteps"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card_subtle"
+            android:padding="12dp"
             android:text="Steps: --"
-            android:textColor="#6F7078"
+            android:textColor="#34343A"
             android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tvItemExercise"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Exercise: -- min"
-            android:textColor="#FF5A1F"
-            android:textSize="14sp"
-            android:textStyle="bold" />
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="92dp"
-        android:layout_height="92dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="12dp"
-        android:contentDescription="Mini wellness chart"
-        android:scaleType="centerCrop"
-        android:src="@drawable/detail_chart" />
+    <TextView
+        android:id="@+id/tvItemExercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_card_subtle"
+        android:padding="12dp"
+        android:text="Exercise: -- min"
+        android:textColor="#34343A"
+        android:textSize="14sp" />
 </LinearLayout>

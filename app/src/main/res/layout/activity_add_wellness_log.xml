@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Date"
-                android:textColor="#FF3B30"
+                android:textColor="#0A84FF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -117,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Health Summary"
-                android:textColor="#FF3B30"
+                android:textColor="#0A84FF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -285,20 +285,6 @@
             android:background="@drawable/bg_primary_button"
             android:backgroundTint="@null"
             android:text="Submit"
-            android:textAllCaps="false"
-            android:textColor="@color/function_button_text"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:backgroundTint="@null" />
-
-        <Button
-            android:id="@+id/buttonCancelLog"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/bg_primary_button"
-            android:backgroundTint="@null"
-            android:text="Cancel"
             android:textAllCaps="false"
             android:textColor="@color/function_button_text"
             android:textSize="16sp"
