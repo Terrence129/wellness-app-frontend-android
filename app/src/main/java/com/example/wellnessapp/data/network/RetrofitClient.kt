@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    private const val BASE_URL = "https://well.chenyaqi.com/api/"
+    private const val BASE_URL = "http://simplewell-alb-717807612.ap-southeast-1.elb.amazonaws.com/api/"
 
     @Volatile
     private var apiService: ApiService? = null
