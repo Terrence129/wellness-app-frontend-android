@@ -9,13 +9,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.wellnessapp.data.model.WellnessLogRequest
 import com.example.wellnessapp.data.model.WellnessLogResponse
+import com.example.wellnessapp.data.model.toUpdateRequest
 import com.example.wellnessapp.data.repository.WellnessRepository
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 sealed class AddLogUiState {
     object Idle : AddLogUiState()
     object Loading : AddLogUiState()
     data class Success(val log: WellnessLogResponse) : AddLogUiState()
+    data class ConfirmOverwrite(
+        val existingLog: WellnessLogResponse,
+        val request: WellnessLogRequest
+    ) : AddLogUiState()
     data class Error(val message: String) : AddLogUiState()
 }
 
@@ -51,14 +57,39 @@ class AddWellnessLogViewModel(
             _state.value = AddLogUiState.Loading
 
             runCatching {
-                repository.createWellnessLog(request)
+                repository.getWellnessLogByDate(request.logDate)
+            }.onSuccess { response ->
+                val data = response.data
+                if (response.success && data != null) {
+                    _state.value = AddLogUiState.ConfirmOverwrite(data, request)
+                } else {
+                    createNewLog(request)
+                }
+            }.onFailure { throwable ->
+                if (throwable is HttpException && throwable.code() == 404) {
+                    createNewLog(request)
+                } else {
+                    _state.value = AddLogUiState.Error(
+                        throwable.message ?: "Network error"
+                    )
+                }
+            }
+        }
+    }
+
+    fun overwriteLog(existingLog: WellnessLogResponse, request: WellnessLogRequest) {
+        viewModelScope.launch {
+            _state.value = AddLogUiState.Loading
+
+            runCatching {
+                repository.updateWellnessLog(existingLog.id, request.toUpdateRequest())
             }.onSuccess { response ->
                 val data = response.data
                 if (response.success && data != null) {
                     _state.value = AddLogUiState.Success(data)
                 } else {
                     _state.value = AddLogUiState.Error(
-                        response.message.ifBlank { "Create failed" }
+                        response.message.ifBlank { "Update failed" }
                     )
                 }
             }.onFailure { throwable ->
@@ -66,6 +97,29 @@ class AddWellnessLogViewModel(
                     throwable.message ?: "Network error"
                 )
             }
+        }
+    }
+
+    fun cancelOverwrite() {
+        _state.value = AddLogUiState.Idle
+    }
+
+    private suspend fun createNewLog(request: WellnessLogRequest) {
+        runCatching {
+            repository.createWellnessLog(request)
+        }.onSuccess { response ->
+            val data = response.data
+            if (response.success && data != null) {
+                _state.value = AddLogUiState.Success(data)
+            } else {
+                _state.value = AddLogUiState.Error(
+                    response.message.ifBlank { "Create failed" }
+                )
+            }
+        }.onFailure { throwable ->
+            _state.value = AddLogUiState.Error(
+                throwable.message ?: "Network error"
+            )
         }
     }
 

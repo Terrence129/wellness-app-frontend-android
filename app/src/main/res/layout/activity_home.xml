@@ -67,16 +67,6 @@
                 android:text="2026-06-24"
                 android:textColor="#6F7078"
                 android:textSize="15sp" />
-
-            <ImageView
-                android:id="@+id/ivHomeHero"
-                android:layout_width="match_parent"
-                android:layout_height="166dp"
-                android:layout_marginTop="18dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="Wellness overview illustration"
-                android:scaleType="centerCrop"
-                android:src="@drawable/home_hero" />
         </LinearLayout>
 
         <LinearLayout
@@ -244,7 +234,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Show all wellness data"
+                        android:text="Show wellness data"
                         android:textColor="#111111"
                         android:textSize="15sp" />
 

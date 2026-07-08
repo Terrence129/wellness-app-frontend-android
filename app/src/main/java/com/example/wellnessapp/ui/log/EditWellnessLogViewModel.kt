@@ -31,6 +31,7 @@ class EditWellnessLogViewModel(
 
     fun updateLog(
         id: Long,
+        logDate: String,
         sleepHoursText: String,
         moodScoreText: String,
         waterCupsText: String,
@@ -44,6 +45,7 @@ class EditWellnessLogViewModel(
         }
 
         val request = buildRequestOrShowError(
+            logDate,
             sleepHoursText,
             moodScoreText,
             waterCupsText,
@@ -94,6 +96,7 @@ class EditWellnessLogViewModel(
     }
 
     private fun buildRequestOrShowError(
+        logDate: String,
         sleepHoursText: String,
         moodScoreText: String,
         waterCupsText: String,
@@ -101,6 +104,12 @@ class EditWellnessLogViewModel(
         exerciseMinutesText: String,
         note: String
     ): WellnessLogUpdateRequest? {
+        val date = logDate.trim()
+        if (!date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
+            _state.value = EditLogUiState.Error("Please choose a valid date")
+            return null
+        }
+
         val sleepHours = sleepHoursText.trim().toDoubleOrNull()
         if (sleepHours == null || sleepHours < 0.0 || sleepHours > 24.0) {
             _state.value = EditLogUiState.Error("Sleep hours must be between 0 and 24")
@@ -134,6 +143,7 @@ class EditWellnessLogViewModel(
         val cleanNote = note.trim().ifBlank { null }
 
         return WellnessLogUpdateRequest(
+            logDate = date,
             sleepHours = sleepHours,
             moodScore = moodScore,
             waterCups = waterCups,

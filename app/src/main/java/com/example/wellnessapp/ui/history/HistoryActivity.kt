@@ -3,6 +3,7 @@
 
 package com.example.wellnessapp.ui.history
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -19,6 +20,7 @@ import com.example.wellnessapp.data.repository.WellnessRepository
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.TimeZone
 
 /**
  * Shows the user's historical wellness logs.
@@ -26,6 +28,10 @@ import java.util.Locale
  * Author: Member F
  */
 class HistoryActivity : AppCompatActivity() {
+
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply {
+        timeZone = TimeZone.getTimeZone("UTC")
+    }
 
     private val viewModel: HistoryViewModel by viewModels {
         HistoryViewModel.Factory(
@@ -80,6 +86,13 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun setupActions() {
+        startDateInput.setOnClickListener {
+            showDatePicker(startDateInput) { showDatePicker(endDateInput, minDate = it) }
+        }
+        endDateInput.setOnClickListener {
+            showDatePicker(endDateInput, minDate = parseDate(startDateInput.text.toString()))
+        }
+
         findViewById<Button>(R.id.btnApplyFilter).setOnClickListener {
             loadLogs()
         }
@@ -139,13 +152,43 @@ class HistoryActivity : AppCompatActivity() {
         endDateInput.setText(today())
     }
 
+    private fun showDatePicker(
+        target: EditText,
+        minDate: Long? = null,
+        onDateSelected: ((Long) -> Unit)? = null
+    ) {
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        runCatching { dateFormat.parse(target.text.toString().trim()) }.getOrNull()?.let {
+            calendar.time = it
+        }
+
+        DatePickerDialog(
+            this,
+            { _, year, month, dayOfMonth ->
+                val date = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth)
+                target.setText(date)
+                onDateSelected?.invoke(parseDate(date) ?: return@DatePickerDialog)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            minDate?.let { datePicker.minDate = it }
+            datePicker.maxDate = Calendar.getInstance(TimeZone.getTimeZone("UTC")).timeInMillis
+        }.show()
+    }
+
+    private fun parseDate(value: String): Long? {
+        return runCatching { dateFormat.parse(value.trim())?.time }.getOrNull()
+    }
+
     private fun today(): String {
-        return SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().time)
+        return dateFormat.format(Calendar.getInstance(TimeZone.getTimeZone("UTC")).time)
     }
 
     private fun daysAgo(days: Int): String {
-        val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         calendar.add(Calendar.DAY_OF_YEAR, -days)
-        return SimpleDateFormat("yyyy-MM-dd", Locale.US).format(calendar.time)
+        return dateFormat.format(calendar.time)
     }
 }

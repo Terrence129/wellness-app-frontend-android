@@ -3,6 +3,7 @@
 package com.example.wellnessapp.ui.log
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -17,12 +18,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.wellnessapp.R
 import com.example.wellnessapp.ui.home.HomeActivity
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class `EditWellnessLogActivity` : AppCompatActivity() {
+
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     private val viewModel: EditWellnessLogViewModel by viewModels()
 
     private lateinit var textLogDate: TextView
+    private lateinit var buttonPickDate: Button
     private lateinit var inputSleepHours: EditText
     private lateinit var spinnerMoodScore: Spinner
     private lateinit var inputWaterCups: EditText
@@ -31,7 +38,6 @@ class `EditWellnessLogActivity` : AppCompatActivity() {
     private lateinit var inputNote: EditText
     private lateinit var buttonUpdateLog: Button
     private lateinit var buttonDeleteLog: Button
-    private lateinit var buttonCancelEdit: Button
     private lateinit var textError: TextView
     private lateinit var progressBar: ProgressBar
 
@@ -51,6 +57,7 @@ class `EditWellnessLogActivity` : AppCompatActivity() {
 
     private fun bindViews() {
         textLogDate = findViewById(R.id.textLogDate)
+        buttonPickDate = findViewById(R.id.buttonPickDate)
         inputSleepHours = findViewById(R.id.inputSleepHours)
         spinnerMoodScore = findViewById(R.id.spinnerMoodScore)
         inputWaterCups = findViewById(R.id.inputWaterCups)
@@ -59,7 +66,6 @@ class `EditWellnessLogActivity` : AppCompatActivity() {
         inputNote = findViewById(R.id.inputNote)
         buttonUpdateLog = findViewById(R.id.buttonUpdateLog)
         buttonDeleteLog = findViewById(R.id.buttonDeleteLog)
-        buttonCancelEdit = findViewById(R.id.buttonCancelEdit)
         textError = findViewById(R.id.textError)
         progressBar = findViewById(R.id.progressBar)
     }
@@ -93,9 +99,12 @@ class `EditWellnessLogActivity` : AppCompatActivity() {
 
     private fun setupListeners() {
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
+        buttonPickDate.setOnClickListener { showDatePicker() }
+        textLogDate.setOnClickListener { showDatePicker() }
         buttonUpdateLog.setOnClickListener {
             viewModel.updateLog(
                 id = logId,
+                logDate = textLogDate.text.toString(),
                 sleepHoursText = inputSleepHours.text.toString(),
                 moodScoreText = spinnerMoodScore.selectedItem.toString(),
                 waterCupsText = inputWaterCups.text.toString(),
@@ -113,10 +122,26 @@ class `EditWellnessLogActivity` : AppCompatActivity() {
                 .setNegativeButton("Cancel", null)
                 .show()
         }
+    }
 
-        buttonCancelEdit.setOnClickListener {
-            finish()
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        runCatching { dateFormat.parse(textLogDate.text.toString().trim()) }.getOrNull()?.let {
+            calendar.time = it
         }
+
+        DatePickerDialog(
+            this,
+            { _, year, month, dayOfMonth ->
+                logDate = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth)
+                textLogDate.text = logDate
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            datePicker.maxDate = Calendar.getInstance().timeInMillis
+        }.show()
     }
 
     private fun observeState() {
@@ -164,7 +189,7 @@ class `EditWellnessLogActivity` : AppCompatActivity() {
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         buttonUpdateLog.isEnabled = !isLoading
         buttonDeleteLog.isEnabled = !isLoading
-        buttonCancelEdit.isEnabled = !isLoading
+        buttonPickDate.isEnabled = !isLoading
     }
 
     companion object {

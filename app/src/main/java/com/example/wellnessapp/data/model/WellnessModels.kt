@@ -11,6 +11,7 @@ data class WellnessLogRequest(
 )
 
 data class WellnessLogUpdateRequest(
+    val logDate: String,
     val sleepHours: Double?,
     val moodScore: Int?,
     val waterCups: Int?,
@@ -29,4 +30,14 @@ data class WellnessLogResponse(
     val exerciseMinutes: Int?,
     val note: String?,
     val createdAt: String? = null
+)
+
+fun WellnessLogRequest.toUpdateRequest() = WellnessLogUpdateRequest(
+    logDate = logDate,
+    sleepHours = sleepHours,
+    moodScore = moodScore,
+    waterCups = waterCups,
+    steps = steps,
+    exerciseMinutes = exerciseMinutes,
+    note = note
 )
