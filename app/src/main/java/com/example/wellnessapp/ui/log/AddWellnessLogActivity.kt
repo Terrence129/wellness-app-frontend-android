@@ -75,6 +75,7 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
     private lateinit var textError: TextView
     private lateinit var progressBar: ProgressBar
     private var editBodyProfileOnly = false
+    private var forceBodyProfileOnOpen = false
 
     private val genderOptions = listOf(
         SelectionOption("Select gender", ""),
@@ -97,6 +98,7 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
 
         profilePrefs = getSharedPreferences(PROFILE_PREFS_NAME, MODE_PRIVATE)
         editBodyProfileOnly = intent.getBooleanExtra(EXTRA_EDIT_BODY_PROFILE, false)
+        forceBodyProfileOnOpen = intent.getBooleanExtra(EXTRA_FORCE_BODY_PROFILE, false)
         bindViews()
         setupSpinners()
         setupInitialDate()
@@ -182,10 +184,14 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
             return
         }
 
-        getSavedBodyProfile()?.let { profile ->
-            bindBodyProfileInputs(profile)
-            showDailyLogOnly()
-        } ?: showBodyProfileStep(showFlow = true)
+        if (forceBodyProfileOnOpen) {
+            showBodyProfileStep(showFlow = true)
+        } else {
+            getSavedBodyProfile()?.let { profile ->
+                bindBodyProfileInputs(profile)
+                showDailyLogOnly()
+            } ?: showBodyProfileStep(showFlow = true)
+        }
         loadBodyProfileFromBackend()
     }
 
@@ -468,9 +474,16 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
                     if (!editBodyProfileOnly) {
                         showDailyLogOnly()
                     }
+                } else if (!editBodyProfileOnly) {
+                    clearBodyProfile()
+                    showBodyProfileStep(showFlow = true)
                 }
             }.onFailure { throwable ->
                 if (throwable is HttpException && throwable.code() == 404) {
+                    clearBodyProfile()
+                    if (!editBodyProfileOnly) {
+                        showBodyProfileStep(showFlow = true)
+                    }
                     return@onFailure
                 }
             }
@@ -495,6 +508,10 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
             .putString(KEY_DATE_OF_BIRTH, profile.dateOfBirth)
             .putString(KEY_ACTIVITY_LEVEL, profile.activityLevel)
             .apply()
+    }
+
+    private fun clearBodyProfile() {
+        profilePrefs.edit().clear().apply()
     }
 
     private fun getSavedBodyProfile(): BodyProfile? {
@@ -679,5 +696,6 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
         const val KEY_ACTIVITY_LEVEL = "activity_level"
         const val ONE_DAY_MILLIS = 24 * 60 * 60 * 1000L
         const val EXTRA_EDIT_BODY_PROFILE = "extra_edit_body_profile"
+        const val EXTRA_FORCE_BODY_PROFILE = "extra_force_body_profile"
     }
 }

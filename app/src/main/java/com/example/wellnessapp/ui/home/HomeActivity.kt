@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wellnessapp.R
+import com.example.wellnessapp.data.model.PersonalInfoResponse
 import com.example.wellnessapp.data.model.WellnessLogResponse
 import com.example.wellnessapp.data.repository.UserRepository
 import com.example.wellnessapp.data.repository.WellnessRepository
@@ -30,6 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 /**
  * Home screen for the SimpleWell Android app.
@@ -56,6 +58,7 @@ class HomeActivity : AppCompatActivity() {
     private val pinnedAdapter = PinnedCarouselAdapter()
     private lateinit var recentLogsAdapter: WellnessLogAdapter
     private val snapHelper = PagerSnapHelper()
+    private var bodyProfilePromptShown = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +74,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.loadHome(currentDate())
+        promptForBodyProfileIfNeeded()
     }
 
     private fun bindViews() {
@@ -175,6 +179,39 @@ class HomeActivity : AppCompatActivity() {
         progressBar.visibility = View.GONE
         errorText.visibility = View.VISIBLE
         errorText.text = message
+    }
+
+    private fun promptForBodyProfileIfNeeded() {
+        if (bodyProfilePromptShown) return
+        lifecycleScope.launch {
+            runCatching {
+                UserRepository(applicationContext).getPersonalInfo()
+            }.onSuccess { response ->
+                if (!response.success || response.data?.isCompleteBodyProfile() != true) {
+                    openBodyProfileSetup()
+                }
+            }.onFailure { error ->
+                if (error is HttpException && error.code() == 404) {
+                    openBodyProfileSetup()
+                }
+            }
+        }
+    }
+
+    private fun openBodyProfileSetup() {
+        bodyProfilePromptShown = true
+        startActivity(
+            Intent(this, AddWellnessLogActivity::class.java)
+                .putExtra(AddWellnessLogActivity.EXTRA_FORCE_BODY_PROFILE, true)
+        )
+    }
+
+    private fun PersonalInfoResponse.isCompleteBodyProfile(): Boolean {
+        return heightCm > 0.0 &&
+            weightKg > 0.0 &&
+            !dateOfBirth.isNullOrBlank() &&
+            gender.isNotBlank() &&
+            activityLevel.isNotBlank()
     }
 
     private fun openEdit(log: WellnessLogResponse) {
