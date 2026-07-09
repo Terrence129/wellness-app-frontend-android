@@ -3,6 +3,8 @@ package com.example.wellnessapp.data.network
 import com.example.wellnessapp.data.model.AiAdviceRequest
 import com.example.wellnessapp.data.model.AiAdviceResponse
 import com.example.wellnessapp.data.model.ApiResponse
+import com.example.wellnessapp.data.model.ChatConversationResponse
+import com.example.wellnessapp.data.model.ChatMessageResponse
 import com.example.wellnessapp.data.model.ChatRequest
 import com.example.wellnessapp.data.model.ChatResponse
 import com.example.wellnessapp.data.model.LoginRequest
@@ -80,10 +82,38 @@ interface ApiService {
     @GET("ai/advice/latest")
     suspend fun getLatestAiAdvice(): ApiResponse<AiAdviceResponse>
 
+    @GET("ai/advice")
+    suspend fun getAiAdviceHistory(
+        @Query("startDate") startDate: String?,
+        @Query("endDate") endDate: String?,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sort") sort: String
+    ): ApiResponse<PageResponse<AiAdviceResponse>>
+
+    @GET("ai/advice/{id}")
+    suspend fun getAiAdviceDetail(
+        @Path("id") id: Long
+    ): ApiResponse<AiAdviceResponse>
+
     @POST("ai/chat")
     suspend fun sendChatMessage(
         @Body request: ChatRequest
     ): ApiResponse<ChatResponse>
+
+    @GET("ai/chat/conversations")
+    suspend fun getChatConversations(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): ApiResponse<PageResponse<ChatConversationResponse>>
+
+    @GET("ai/chat/conversations/{conversationId}/messages")
+    suspend fun getChatConversationMessages(
+        @Path("conversationId") conversationId: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sort") sort: String
+    ): ApiResponse<PageResponse<ChatMessageResponse>>
 
     // --- Personal Info ---
 

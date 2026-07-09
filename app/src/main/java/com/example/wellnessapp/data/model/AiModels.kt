@@ -51,6 +51,18 @@ data class ChatMessageResponse(
 )
 
 /**
+ * Chat conversation summary returned by the chatbot history endpoint.
+ */
+data class ChatConversationResponse(
+    val conversationId: String = "",
+    val startedAt: String? = null,
+    val lastMessageAt: String? = null,
+    val messageCount: Int = 0,
+    val lastRole: String? = null,
+    val lastMessagePreview: String? = null
+)
+
+/**
  * Chatbot response returned by the Spring Boot backend.
  *
  * @author Yunke Deng
