@@ -12,21 +12,22 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.wellnessapp.R
 import com.example.wellnessapp.data.local.TokenManager
-import com.example.wellnessapp.data.model.WellnessLogResponse
 import com.example.wellnessapp.data.repository.UserRepository
 import com.example.wellnessapp.data.repository.WellnessRepository
+import com.example.wellnessapp.ui.ai.AiCoachActivity
 import com.example.wellnessapp.ui.auth.LoginActivity
 import com.example.wellnessapp.ui.history.HistoryActivity
 import com.example.wellnessapp.ui.log.AddWellnessLogActivity
+import com.example.wellnessapp.ui.summary.WeeklySummaryActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.launch
-import com.example.wellnessapp.ui.ai.AiAdviceActivity
-import com.example.wellnessapp.ui.ai.ChatbotActivity
-import com.example.wellnessapp.ui.summary.WeeklySummaryActivity
 
 /**
  * Home screen for the SimpleWell Android app.
@@ -44,21 +45,20 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var welcomeText: TextView
     private lateinit var todayDateText: TextView
-    private lateinit var statusText: TextView
-    private lateinit var sleepText: TextView
-    private lateinit var moodText: TextView
-    private lateinit var waterText: TextView
-    private lateinit var stepsText: TextView
-    private lateinit var exerciseText: TextView
-    private lateinit var noteText: TextView
     private lateinit var errorText: TextView
     private lateinit var progressBar: ProgressBar
+    private lateinit var pinnedCards: RecyclerView
+    private lateinit var profileDot: View
+    private lateinit var todayDot: View
+    private val pinnedAdapter = PinnedCarouselAdapter()
+    private val snapHelper = PagerSnapHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         bindViews()
+        setupPinnedCarousel()
         setupActions()
         observeViewModel()
     }
@@ -71,25 +71,41 @@ class HomeActivity : AppCompatActivity() {
     private fun bindViews() {
         welcomeText = findViewById(R.id.tvWelcome)
         todayDateText = findViewById(R.id.tvTodayDate)
-        statusText = findViewById(R.id.tvTodayStatus)
-        sleepText = findViewById(R.id.tvSleepHours)
-        moodText = findViewById(R.id.tvMoodScore)
-        waterText = findViewById(R.id.tvWaterCups)
-        stepsText = findViewById(R.id.tvSteps)
-        exerciseText = findViewById(R.id.tvExerciseMinutes)
-        noteText = findViewById(R.id.tvNote)
         errorText = findViewById(R.id.tvHomeError)
         progressBar = findViewById(R.id.progressHome)
+        pinnedCards = findViewById(R.id.rvPinnedCards)
+        profileDot = findViewById(R.id.dotProfile)
+        todayDot = findViewById(R.id.dotToday)
+    }
+
+    private fun setupPinnedCarousel() {
+        pinnedCards.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        pinnedCards.adapter = pinnedAdapter
+        snapHelper.attachToRecyclerView(pinnedCards)
+        pinnedCards.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    updatePinnedIndicator(currentPinnedPosition())
+                }
+            }
+        })
     }
 
     private fun setupActions() {
-        findViewById<View>(R.id.btnAddLog).setOnClickListener {
+        findViewById<View>(R.id.navHome).setOnClickListener {
+            pinnedCards.smoothScrollToPosition(PinnedCarouselAdapter.PROFILE_POSITION)
+        }
+
+        findViewById<View>(R.id.navAddLog).setOnClickListener {
             startActivity(Intent(this, AddWellnessLogActivity::class.java))
         }
-        findViewById<View>(R.id.btnHistory).setOnClickListener {
+
+        findViewById<View>(R.id.navHistory).setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
-        findViewById<View>(R.id.btnWeeklySummary).setOnClickListener {
+
+        findViewById<View>(R.id.navTrends).setOnClickListener {
             startActivity(
                 Intent(
                     this,
@@ -98,20 +114,11 @@ class HomeActivity : AppCompatActivity() {
             )
         }
 
-        findViewById<View>(R.id.btnAiAdvice).setOnClickListener {
+        findViewById<View>(R.id.navAi).setOnClickListener {
             startActivity(
                 Intent(
                     this,
-                    AiAdviceActivity::class.java
-                )
-            )
-        }
-
-        findViewById<View>(R.id.btnChatbot).setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    ChatbotActivity::class.java
+                    AiCoachActivity::class.java
                 )
             )
         }
@@ -141,34 +148,14 @@ class HomeActivity : AppCompatActivity() {
         errorText.visibility = View.GONE
         welcomeText.text = getString(R.string.home_welcome_format, state.user.username)
         todayDateText.text = state.today
-        renderTodayLog(state.todayLog)
+        pinnedAdapter.submitData(state.user, state.todayLog)
+        updatePinnedIndicator(currentPinnedPosition())
     }
 
     private fun showError(message: String) {
         progressBar.visibility = View.GONE
         errorText.visibility = View.VISIBLE
         errorText.text = message
-    }
-
-    private fun renderTodayLog(log: WellnessLogResponse?) {
-        if (log == null) {
-            statusText.text = getString(R.string.home_no_log_today)
-            sleepText.text = getString(R.string.metric_empty)
-            moodText.text = getString(R.string.metric_empty)
-            waterText.text = getString(R.string.metric_empty)
-            stepsText.text = getString(R.string.metric_empty)
-            exerciseText.text = getString(R.string.metric_empty)
-            noteText.text = getString(R.string.home_no_note)
-            return
-        }
-
-        statusText.text = getString(R.string.home_log_ready)
-        sleepText.text = getString(R.string.sleep_hours_format, formatDecimal(log.sleepHours))
-        moodText.text = getString(R.string.mood_score_format, log.moodScore?.toString() ?: "--")
-        waterText.text = getString(R.string.water_cups_format, log.waterCups?.toString() ?: "--")
-        stepsText.text = getString(R.string.steps_format, log.steps?.toString() ?: "--")
-        exerciseText.text = getString(R.string.exercise_minutes_format, log.exerciseMinutes?.toString() ?: "--")
-        noteText.text = log.note?.takeIf { it.isNotBlank() } ?: getString(R.string.home_no_note)
     }
 
     private fun logout() {
@@ -186,12 +173,32 @@ class HomeActivity : AppCompatActivity() {
         return SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
     }
 
-    private fun formatDecimal(value: Double?): String {
-        if (value == null) return "--"
-        return if (value % 1.0 == 0.0) {
-            value.toInt().toString()
+    private fun currentPinnedPosition(): Int {
+        val layoutManager = pinnedCards.layoutManager ?: return PinnedCarouselAdapter.PROFILE_POSITION
+        val snapView = snapHelper.findSnapView(layoutManager) ?: return PinnedCarouselAdapter.PROFILE_POSITION
+        return layoutManager.getPosition(snapView)
+    }
+
+    private fun updatePinnedIndicator(position: Int) {
+        if (position == PinnedCarouselAdapter.PROFILE_POSITION) {
+            setIndicatorState(profileDot, true)
+            setIndicatorState(todayDot, false)
         } else {
-            String.format(Locale.US, "%.1f", value)
+            setIndicatorState(profileDot, false)
+            setIndicatorState(todayDot, true)
+        }
+    }
+
+    private fun setIndicatorState(dot: View, isActive: Boolean) {
+        dot.setBackgroundResource(if (isActive) R.drawable.bg_indicator_active else R.drawable.bg_indicator_inactive)
+        dot.layoutParams = dot.layoutParams.apply {
+            width = resources.getDimensionPixelSize(
+                if (isActive) {
+                    R.dimen.pinned_indicator_active_width
+                } else {
+                    R.dimen.pinned_indicator_inactive_width
+                }
+            )
         }
     }
 }

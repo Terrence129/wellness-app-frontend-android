@@ -16,9 +16,14 @@
         android:theme="@style/Theme.WellnessApp">
 
         <activity
+            android:name=".ui.ai.AiCoachActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".ui.ai.ChatbotActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" /><activity
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".ui.ai.AiAdviceActivity"
             android:exported="false" />
         <activity
