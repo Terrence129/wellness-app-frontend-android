@@ -8,6 +8,8 @@ import com.example.wellnessapp.data.model.ChatResponse
 import com.example.wellnessapp.data.model.LoginRequest
 import com.example.wellnessapp.data.model.LoginResponse
 import com.example.wellnessapp.data.model.PageResponse
+import com.example.wellnessapp.data.model.PersonalInfoResponse
+import com.example.wellnessapp.data.model.PersonalInfoUpsertRequest
 import com.example.wellnessapp.data.model.RegisterRequest
 import com.example.wellnessapp.data.model.UserResponse
 import com.example.wellnessapp.data.model.WeeklySummaryResponse
@@ -82,5 +84,15 @@ interface ApiService {
     suspend fun sendChatMessage(
         @Body request: ChatRequest
     ): ApiResponse<ChatResponse>
+
+    // --- Personal Info ---
+
+    @GET("users/me/personal-info")
+    suspend fun getPersonalInfo(): ApiResponse<PersonalInfoResponse>
+
+    @PUT("users/me/personal-info")
+    suspend fun upsertPersonalInfo(
+        @Body request: PersonalInfoUpsertRequest
+    ): ApiResponse<PersonalInfoResponse>
 
 }
