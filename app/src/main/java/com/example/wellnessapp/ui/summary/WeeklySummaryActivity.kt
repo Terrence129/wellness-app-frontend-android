@@ -21,6 +21,8 @@ import com.example.wellnessapp.data.repository.WellnessRepository
 import com.example.wellnessapp.ui.navigation.BottomNavigationController
 import com.example.wellnessapp.ui.navigation.BottomNavigationController.ActiveItem
 import com.example.wellnessapp.util.UiState
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 import kotlinx.coroutines.launch
 
@@ -33,6 +35,7 @@ class WeeklySummaryActivity : AppCompatActivity() {
 
     private val viewModel: WeeklySummaryViewModel by viewModels()
     private val wellnessRepository by lazy { WellnessRepository(applicationContext) }
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     private lateinit var tvDateRange: TextView
     private lateinit var progressBar: ProgressBar
@@ -77,9 +80,11 @@ class WeeklySummaryActivity : AppCompatActivity() {
     }
 
     private fun prepareDefaultDateRange() {
-        startDate = ""
-        endDate = ""
-        tvDateRange.text = "Latest available week"
+        val calendar = Calendar.getInstance()
+        endDate = dateFormat.format(calendar.time)
+        calendar.add(Calendar.DAY_OF_YEAR, -6)
+        startDate = dateFormat.format(calendar.time)
+        tvDateRange.text = "$startDate to $endDate"
     }
 
     private fun observeSummaryState() {
@@ -150,41 +155,75 @@ class WeeklySummaryActivity : AppCompatActivity() {
                     returnedEndDate.takeIf { it.isNotBlank() }
                 ).data.orEmpty()
             }.getOrDefault(emptyList()).sortedBy { it.logDate }
-            showCharts(data, logs)
+            showCharts(data, logs, weekDates(returnedEndDate))
         }
     }
 
-    private fun showCharts(data: WeeklySummaryResponse, logs: List<WellnessLogResponse>) {
+    private fun showCharts(
+        data: WeeklySummaryResponse,
+        logs: List<WellnessLogResponse>,
+        dates: List<String>
+    ) {
         chartList.removeAllViews()
-        if (logs.isEmpty()) {
-            chartList.addView(messageCard("No daily log data is available for this week."))
-            return
-        }
+        val logsByDate = logs.associateBy { it.logDate }
+        val todayLog = logsByDate[dates.lastOrNull().orEmpty()]
 
-        addChartCard("Sleep", String.format(Locale.US, "%.1f h avg", data.averageSleepHours), logs) {
+        addChartCard(
+            title = "Sleep",
+            todayText = "${formatOne(todayLog?.sleepHours ?: 0.0)} h",
+            averageText = "${formatOne(data.averageSleepHours)} h",
+            dates = dates,
+            logsByDate = logsByDate
+        ) {
             it.sleepHours
         }
-        addChartCard("Mood", String.format(Locale.US, "%.1f / 5 avg", data.averageMoodScore), logs) {
+        addChartCard(
+            title = "Mood",
+            todayText = "${formatOne(todayLog?.moodScore?.toDouble() ?: 0.0)} / 5",
+            averageText = "${formatOne(data.averageMoodScore)} / 5",
+            dates = dates,
+            logsByDate = logsByDate
+        ) {
             it.moodScore?.toDouble()
         }
-        addChartCard("Water", String.format(Locale.US, "%.1f cups avg", data.averageWaterCups), logs) {
+        addChartCard(
+            title = "Water",
+            todayText = "${formatOne(todayLog?.waterCups?.toDouble() ?: 0.0)} cups",
+            averageText = "${formatOne(data.averageWaterCups)} cups",
+            dates = dates,
+            logsByDate = logsByDate
+        ) {
             it.waterCups?.toDouble()
         }
-        addChartCard("Steps", "${data.totalSteps / data.daysWithLogs.coerceAtLeast(1)} avg", logs) {
+        addChartCard(
+            title = "Steps",
+            todayText = "${todayLog?.steps ?: 0}",
+            averageText = "${data.totalSteps / data.daysWithLogs.coerceAtLeast(1)}",
+            dates = dates,
+            logsByDate = logsByDate
+        ) {
             it.steps?.toDouble()
         }
-        addChartCard("Exercise", "${data.totalExerciseMinutes / data.daysWithLogs.coerceAtLeast(1)} min avg", logs) {
+        addChartCard(
+            title = "Exercise",
+            todayText = "${todayLog?.exerciseMinutes ?: 0} min",
+            averageText = "${data.totalExerciseMinutes / data.daysWithLogs.coerceAtLeast(1)} min",
+            dates = dates,
+            logsByDate = logsByDate
+        ) {
             it.exerciseMinutes?.toDouble()
         }
     }
 
     private fun addChartCard(
         title: String,
-        valueText: String,
-        logs: List<WellnessLogResponse>,
+        todayText: String,
+        averageText: String,
+        dates: List<String>,
+        logsByDate: Map<String, WellnessLogResponse>,
         valueOf: (WellnessLogResponse) -> Double?
     ) {
-        val values = logs.map { it.logDate to (valueOf(it) ?: 0.0) }
+        val values = dates.map { it to (logsByDate[it]?.let(valueOf) ?: 0.0) }
         val maxValue = values.maxOfOrNull { it.second }?.coerceAtLeast(1.0) ?: 1.0
         val card = LinearLayout(this).apply {
             layoutParams = LinearLayout.LayoutParams(
@@ -218,84 +257,120 @@ class WeeklySummaryActivity : AppCompatActivity() {
         }
 
         row.addView(LinearLayout(this).apply {
-            layoutParams = LinearLayout.LayoutParams(0, dp(122), 1f)
-            gravity = Gravity.BOTTOM
-            orientation = LinearLayout.HORIZONTAL
-            values.forEach { (date, value) ->
-                addView(barColumn(date, value, maxValue))
-            }
+            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            orientation = LinearLayout.VERTICAL
+
+            addView(LinearLayout(this@WeeklySummaryActivity).apply {
+                layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 94.dp)
+                gravity = Gravity.BOTTOM
+                orientation = LinearLayout.HORIZONTAL
+                values.forEach { (_, value) ->
+                    addView(barColumn(value, maxValue))
+                }
+            })
+
+            addView(View(this@WeeklySummaryActivity).apply {
+                layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1.dp)
+                background = solidDrawable(ContextCompat.getColor(this@WeeklySummaryActivity, R.color.classic_gray))
+            })
+
+            addView(LinearLayout(this@WeeklySummaryActivity).apply {
+                layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                orientation = LinearLayout.HORIZONTAL
+                values.forEach { (date, _) ->
+                    addView(axisLabel(date))
+                }
+            })
         })
 
-        row.addView(TextView(this).apply {
-            layoutParams = LinearLayout.LayoutParams(dp(88), ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+        row.addView(LinearLayout(this).apply {
+            layoutParams = LinearLayout.LayoutParams(dp(104), ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                 marginStart = dp(12)
             }
-            gravity = Gravity.CENTER
-            text = valueText
-            setTextColor(ContextCompat.getColor(this@WeeklySummaryActivity, R.color.health_orange))
-            textSize = 16f
-            setTypeface(typeface, android.graphics.Typeface.BOLD)
+            gravity = Gravity.CENTER_VERTICAL
+            orientation = LinearLayout.VERTICAL
+            addView(metricText("· today: $todayText"))
+            addView(metricText("· average: $averageText"))
         })
 
         card.addView(row)
         chartList.addView(card)
     }
 
-    private fun barColumn(date: String, value: Double, maxValue: Double): LinearLayout {
-        return LinearLayout(this).apply {
+    private fun barColumn(value: Double, maxValue: Double): FrameLayout {
+        return FrameLayout(this).apply {
             layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f)
-            gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
-            orientation = LinearLayout.VERTICAL
-
-            addView(FrameLayout(this@WeeklySummaryActivity).apply {
-                layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 94.dp)
-                addView(View(this@WeeklySummaryActivity).apply {
-                    layoutParams = FrameLayout.LayoutParams(
-                        12.dp,
-                        ((value / maxValue) * 88).toInt().coerceAtLeast(if (value > 0.0) 6 else 1).dp,
-                        Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
-                    )
-                    background = roundedDrawable(ContextCompat.getColor(this@WeeklySummaryActivity, R.color.health_orange), 8.dp)
-                })
-            })
-
-            addView(TextView(this@WeeklySummaryActivity).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    topMargin = 6.dp
-                }
-                gravity = Gravity.CENTER
-                text = date.takeLast(5)
-                setTextColor(ContextCompat.getColor(this@WeeklySummaryActivity, R.color.health_text_secondary))
-                textSize = 10f
+            addView(View(this@WeeklySummaryActivity).apply {
+                layoutParams = FrameLayout.LayoutParams(
+                    12.dp,
+                    ((value / maxValue) * 88).toInt().coerceAtLeast(if (value > 0.0) 6 else 0).dp,
+                    Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                )
+                background = topRoundedDrawable(ContextCompat.getColor(this@WeeklySummaryActivity, R.color.health_orange), 8.dp)
             })
         }
     }
 
-    private fun messageCard(message: String): TextView {
+    private fun axisLabel(date: String): TextView {
         return TextView(this).apply {
             layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            ).apply {
-                topMargin = dp(14)
-            }
-            background = ContextCompat.getDrawable(this@WeeklySummaryActivity, R.drawable.bg_card)
-            elevation = dp(2).toFloat()
-            setPadding(dp(16), dp(16), dp(16), dp(16))
-            text = message
+                0,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                1f
+            )
+            gravity = Gravity.CENTER
+            text = date.takeLast(5)
             setTextColor(ContextCompat.getColor(this@WeeklySummaryActivity, R.color.health_text_secondary))
-            textSize = 15f
+            textSize = 9f
         }
     }
 
-    private fun roundedDrawable(color: Int, radius: Int): GradientDrawable {
+    private fun metricText(textValue: String): TextView {
+        return TextView(this).apply {
+            text = textValue
+            setTextColor(ContextCompat.getColor(this@WeeklySummaryActivity, R.color.health_orange))
+            textSize = 13f
+            setTypeface(typeface, android.graphics.Typeface.BOLD)
+        }
+    }
+
+    private fun solidDrawable(color: Int): GradientDrawable {
         return GradientDrawable().apply {
             setColor(color)
-            cornerRadius = radius.toFloat()
         }
+    }
+
+    private fun topRoundedDrawable(color: Int, radius: Int): GradientDrawable {
+        return GradientDrawable().apply {
+            setColor(color)
+            cornerRadii = floatArrayOf(
+                radius.toFloat(),
+                radius.toFloat(),
+                radius.toFloat(),
+                radius.toFloat(),
+                0f,
+                0f,
+                0f,
+                0f
+            )
+        }
+    }
+
+    private fun weekDates(lastDate: String): List<String> {
+        val calendar = Calendar.getInstance()
+        runCatching { dateFormat.parse(lastDate) }.getOrNull()?.let {
+            calendar.time = it
+        }
+        calendar.add(Calendar.DAY_OF_YEAR, -6)
+        return List(7) {
+            dateFormat.format(calendar.time).also {
+                calendar.add(Calendar.DAY_OF_YEAR, 1)
+            }
+        }
+    }
+
+    private fun formatOne(value: Double): String {
+        return String.format(Locale.US, "%.1f", value)
     }
 
     private val Int.dp: Int
