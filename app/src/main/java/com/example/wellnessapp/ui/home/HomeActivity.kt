@@ -89,6 +89,7 @@ class HomeActivity : AppCompatActivity() {
     private fun setupPinnedCarousel() {
         pinnedCards.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         pinnedCards.adapter = pinnedAdapter
+        pinnedCards.isNestedScrollingEnabled = false
         snapHelper.attachToRecyclerView(pinnedCards)
         pinnedCards.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -114,6 +115,7 @@ class HomeActivity : AppCompatActivity() {
         )
         recentLogsList.layoutManager = LinearLayoutManager(this)
         recentLogsList.adapter = recentLogsAdapter
+        recentLogsList.isNestedScrollingEnabled = false
     }
 
     private fun setupActions() {

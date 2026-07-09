@@ -1,5 +1,6 @@
 package com.example.wellnessapp.ui.ai
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
@@ -74,6 +75,11 @@ class ChatbotActivity : AppCompatActivity() {
         findViewById<View>(R.id.btnBack)
             .setOnClickListener {
                 finish()
+            }
+
+        findViewById<View>(R.id.btnChatHistory)
+            .setOnClickListener {
+                startActivity(Intent(this, ChatbotHistoryActivity::class.java))
             }
 
         updateSendButtonTint()

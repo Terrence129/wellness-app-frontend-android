@@ -28,6 +28,33 @@
             <TextView
                 style="@style/WellnessHeaderTitle"
                 android:text="AI Wellness Advice" />
+
+            <LinearLayout
+                android:id="@+id/btnAdviceHistory"
+                android:layout_width="56dp"
+                android:layout_height="52dp"
+                android:layout_gravity="end|center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_nav_calendar"
+                    app:tint="@color/function_button_background" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="History"
+                    android:textColor="@color/function_button_background"
+                    android:textSize="10sp" />
+            </LinearLayout>
         </FrameLayout>
 
         <TextView
@@ -109,129 +136,6 @@
                 android:visibility="gone" />
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:text="Advice History"
-            android:textColor="@color/health_text_primary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/etAdviceHistoryStartDate"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_filter_input"
-                android:focusable="false"
-                android:hint="Start"
-                android:inputType="date"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:singleLine="true"
-                android:textColor="@color/health_text_primary"
-                android:textColorHint="@color/health_text_secondary"
-                android:textSize="14sp" />
-
-            <EditText
-                android:id="@+id/etAdviceHistoryEndDate"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_filter_input"
-                android:focusable="false"
-                android:hint="End"
-                android:inputType="date"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:singleLine="true"
-                android:textColor="@color/health_text_primary"
-                android:textColorHint="@color/health_text_secondary"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnApplyAdviceHistoryFilter"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_primary_button"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:text="Apply"
-                android:textAllCaps="false"
-                android:textColor="@color/function_button_text"
-                app:backgroundTint="@null" />
-
-            <Button
-                android:id="@+id/btnClearAdviceHistoryFilter"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_outline_button"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:text="Clear"
-                android:textAllCaps="false"
-                android:textColor="@color/function_button_background"
-                app:backgroundTint="@null" />
-        </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/progressAdviceHistory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="14dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tvAdviceHistoryStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:textColor="@color/health_text_secondary"
-            android:textSize="14sp"
-            android:visibility="gone" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAdviceHistory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false" />
-
-        <Button
-            android:id="@+id/btnLoadMoreAdviceHistory"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/bg_outline_button"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:text="Load More"
-            android:textAllCaps="false"
-            android:textColor="@color/function_button_background"
-            android:visibility="gone"
-            app:backgroundTint="@null" />
 
         <TextView
             android:id="@+id/tvDisclaimer"

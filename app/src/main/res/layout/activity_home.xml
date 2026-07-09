@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_screen">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -163,7 +163,7 @@
 
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
         android:layout_width="match_parent"
