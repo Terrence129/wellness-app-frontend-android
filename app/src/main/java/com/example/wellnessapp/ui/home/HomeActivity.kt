@@ -6,27 +6,23 @@ package com.example.wellnessapp.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wellnessapp.R
-import com.example.wellnessapp.data.local.TokenManager
 import com.example.wellnessapp.data.repository.UserRepository
 import com.example.wellnessapp.data.repository.WellnessRepository
 import com.example.wellnessapp.ui.ai.AiCoachActivity
-import com.example.wellnessapp.ui.auth.LoginActivity
 import com.example.wellnessapp.ui.log.AddWellnessLogActivity
 import com.example.wellnessapp.ui.navigation.TrendsHistoryActivity
+import com.example.wellnessapp.ui.profile.ProfileActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlinx.coroutines.launch
 
 /**
  * Home screen for the SimpleWell Android app.
@@ -112,8 +108,8 @@ class HomeActivity : AppCompatActivity() {
                 )
             )
         }
-        findViewById<Button>(R.id.btnLogout).setOnClickListener {
-            logout()
+        findViewById<View>(R.id.navProfile).setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
     }
 
@@ -146,17 +142,6 @@ class HomeActivity : AppCompatActivity() {
         progressBar.visibility = View.GONE
         errorText.visibility = View.VISIBLE
         errorText.text = message
-    }
-
-    private fun logout() {
-        lifecycleScope.launch {
-            TokenManager(this@HomeActivity).clearToken()
-            val intent = Intent(this@HomeActivity, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            startActivity(intent)
-            finish()
-        }
     }
 
     private fun currentDate(): String {

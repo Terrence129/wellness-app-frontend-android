@@ -11,7 +11,8 @@ class BottomNavigationControllerTest {
             "ui/navigation/TrendsHistoryActivity.kt" to "BottomNavigationController.ActiveItem.TRENDS_HISTORY",
             "ui/summary/WeeklySummaryActivity.kt" to "ActiveItem.TRENDS_HISTORY",
             "ui/history/HistoryActivity.kt" to "ActiveItem.TRENDS_HISTORY",
-            "ui/ai/AiCoachActivity.kt" to "ActiveItem.AI"
+            "ui/ai/AiCoachActivity.kt" to "ActiveItem.AI",
+            "ui/profile/ProfileActivity.kt" to "ActiveItem.PROFILE"
         )
 
         screens.forEach { (path, activeItem) ->

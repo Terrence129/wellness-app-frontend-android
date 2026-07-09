@@ -16,6 +16,7 @@ import com.example.wellnessapp.R
 import com.example.wellnessapp.ui.ai.AiCoachActivity
 import com.example.wellnessapp.ui.home.HomeActivity
 import com.example.wellnessapp.ui.log.AddWellnessLogActivity
+import com.example.wellnessapp.ui.profile.ProfileActivity
 
 /**
  * Adds the app's persistent bottom navigation to authenticated screens.
@@ -26,7 +27,8 @@ object BottomNavigationController {
         HOME,
         TRENDS_HISTORY,
         ADD,
-        AI
+        AI,
+        PROFILE
     }
 
     fun attach(
@@ -126,6 +128,18 @@ object BottomNavigationController {
             ) {
                 if (activeItem != ActiveItem.AI) {
                     activity.openTopLevel(AiCoachActivity::class.java)
+                }
+            }
+        )
+        bottomNavigation.addView(
+            navItem(
+                activity = activity,
+                label = "Profile",
+                iconRes = R.drawable.ic_nav_profile,
+                selected = activeItem == ActiveItem.PROFILE
+            ) {
+                if (activeItem != ActiveItem.PROFILE) {
+                    activity.openTopLevel(ProfileActivity::class.java)
                 }
             }
         )

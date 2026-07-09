@@ -27,6 +27,9 @@
             android:name=".ui.ai.AiAdviceActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.navigation.TrendsHistoryActivity"
             android:exported="false" />
         <activity
