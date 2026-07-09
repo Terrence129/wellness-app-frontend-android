@@ -1,5 +1,6 @@
 package com.example.wellnessapp.ui.ai
 
+import android.app.DatePickerDialog
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
@@ -40,6 +41,19 @@ class AiCoachActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
     private lateinit var adviceContent: LinearLayout
     private lateinit var generateAdviceButton: Button
+    private lateinit var adviceHistoryStartInput: EditText
+    private lateinit var adviceHistoryEndInput: EditText
+    private lateinit var adviceHistoryProgressBar: ProgressBar
+    private lateinit var adviceHistoryStatusText: TextView
+    private lateinit var adviceHistoryRecyclerView: RecyclerView
+    private lateinit var loadMoreAdviceHistoryButton: Button
+    private lateinit var newChatButton: Button
+    private lateinit var toggleChatHistoryButton: Button
+    private lateinit var chatHistoryContainer: LinearLayout
+    private lateinit var chatConversationsRecyclerView: RecyclerView
+    private lateinit var chatHistoryProgressBar: ProgressBar
+    private lateinit var chatHistoryStatusText: TextView
+    private lateinit var loadMoreChatConversationsButton: Button
     private lateinit var chatRecyclerView: RecyclerView
     private lateinit var messageInput: EditText
     private lateinit var sendButton: Button
@@ -47,8 +61,19 @@ class AiCoachActivity : AppCompatActivity() {
     private lateinit var chatErrorText: TextView
 
     private val chatAdapter = ChatMessageAdapter()
+    private val adviceHistoryAdapter =
+        AiAdviceHistoryAdapter { advice ->
+            adviceViewModel.loadAdviceDetail(advice)
+        }
+    private val chatConversationAdapter =
+        ChatConversationAdapter { conversation ->
+            chatViewModel.loadConversationMessages(conversation)
+            chatHistoryContainer.visibility = View.GONE
+        }
     private var startDate = ""
     private var endDate = ""
+    private val historyDateFormat =
+        SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +81,18 @@ class AiCoachActivity : AppCompatActivity() {
 
         bindViews()
         prepareDefaultDateRange()
+        configureAdviceHistoryRecyclerView()
         configureChatRecyclerView()
+        configureChatHistoryRecyclerView()
         bindActions()
         observeAdviceState()
+        observeAdviceHistoryState()
         observeChatState()
+        observeChatHistoryState()
 
         adviceViewModel.loadLatestAdvice()
+        adviceViewModel.loadAdviceHistory()
+        chatViewModel.loadConversationHistory()
     }
 
     private fun bindViews() {
@@ -74,6 +105,21 @@ class AiCoachActivity : AppCompatActivity() {
         statusText = findViewById(R.id.tvStatus)
         adviceContent = findViewById(R.id.adviceContent)
         generateAdviceButton = findViewById(R.id.btnGenerateAdvice)
+        adviceHistoryStartInput = findViewById(R.id.etAdviceHistoryStartDate)
+        adviceHistoryEndInput = findViewById(R.id.etAdviceHistoryEndDate)
+        adviceHistoryProgressBar = findViewById(R.id.progressAdviceHistory)
+        adviceHistoryStatusText = findViewById(R.id.tvAdviceHistoryStatus)
+        adviceHistoryRecyclerView = findViewById(R.id.rvAdviceHistory)
+        loadMoreAdviceHistoryButton =
+            findViewById(R.id.btnLoadMoreAdviceHistory)
+        newChatButton = findViewById(R.id.btnNewChat)
+        toggleChatHistoryButton = findViewById(R.id.btnToggleChatHistory)
+        chatHistoryContainer = findViewById(R.id.chatHistoryContainer)
+        chatConversationsRecyclerView = findViewById(R.id.rvChatConversations)
+        chatHistoryProgressBar = findViewById(R.id.progressChatHistory)
+        chatHistoryStatusText = findViewById(R.id.tvChatHistoryStatus)
+        loadMoreChatConversationsButton =
+            findViewById(R.id.btnLoadMoreChatConversations)
         chatRecyclerView = findViewById(R.id.rvChatMessages)
         messageInput = findViewById(R.id.etChatMessage)
         sendButton = findViewById(R.id.btnSendMessage)
@@ -93,6 +139,62 @@ class AiCoachActivity : AppCompatActivity() {
         requestedRangeText.text = "$startDate to $endDate"
     }
 
+    private fun showHistoryDatePicker(
+        target: EditText,
+        minDate: Long? = null,
+        onDateSelected: ((Long) -> Unit)? = null
+    ) {
+        val calendar = Calendar.getInstance()
+
+        parseHistoryDate(target.text.toString())?.let {
+            calendar.timeInMillis = it
+        }
+
+        DatePickerDialog(
+            this,
+            { _, year, month, dayOfMonth ->
+                val date =
+                    String.format(
+                        Locale.US,
+                        "%04d-%02d-%02d",
+                        year,
+                        month + 1,
+                        dayOfMonth
+                    )
+
+                target.setText(date)
+                onDateSelected?.invoke(
+                    parseHistoryDate(date)
+                        ?: return@DatePickerDialog
+                )
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            minDate?.let {
+                datePicker.minDate = it
+            }
+
+            datePicker.maxDate =
+                Calendar.getInstance().timeInMillis
+        }.show()
+    }
+
+    private fun parseHistoryDate(value: String): Long? {
+        return runCatching {
+            historyDateFormat.parse(value.trim())?.time
+        }.getOrNull()
+    }
+
+    private fun configureAdviceHistoryRecyclerView() {
+        adviceHistoryRecyclerView.layoutManager =
+            LinearLayoutManager(this)
+
+        adviceHistoryRecyclerView.adapter =
+            adviceHistoryAdapter
+    }
+
     private fun configureChatRecyclerView() {
         chatRecyclerView.layoutManager =
             LinearLayoutManager(this).apply {
@@ -100,6 +202,14 @@ class AiCoachActivity : AppCompatActivity() {
             }
 
         chatRecyclerView.adapter = chatAdapter
+    }
+
+    private fun configureChatHistoryRecyclerView() {
+        chatConversationsRecyclerView.layoutManager =
+            LinearLayoutManager(this)
+
+        chatConversationsRecyclerView.adapter =
+            chatConversationAdapter
     }
 
     private fun bindActions() {
@@ -118,8 +228,84 @@ class AiCoachActivity : AppCompatActivity() {
         generateAdviceButton.setOnClickListener {
             adviceViewModel.generateAdvice(
                 startDate = startDate,
-                endDate = endDate
+                endDate = endDate,
+                refreshHistoryOnSuccess = true
             )
+        }
+
+        adviceHistoryStartInput.setOnClickListener {
+            showHistoryDatePicker(adviceHistoryStartInput) { selectedDate ->
+                val selectedEndDate =
+                    parseHistoryDate(
+                        adviceHistoryEndInput.text.toString()
+                    )
+
+                if (
+                    selectedEndDate != null &&
+                    selectedEndDate < selectedDate
+                ) {
+                    adviceHistoryEndInput.text.clear()
+                }
+            }
+        }
+
+        adviceHistoryEndInput.setOnClickListener {
+            showHistoryDatePicker(
+                target = adviceHistoryEndInput,
+                minDate =
+                    parseHistoryDate(
+                        adviceHistoryStartInput.text.toString()
+                    )
+            )
+        }
+
+        findViewById<Button>(R.id.btnApplyAdviceHistoryFilter)
+            .setOnClickListener {
+                adviceViewModel.loadAdviceHistory(
+                    startDate =
+                        adviceHistoryStartInput.text.toString(),
+                    endDate =
+                        adviceHistoryEndInput.text.toString(),
+                    reset = true
+                )
+            }
+
+        findViewById<Button>(R.id.btnClearAdviceHistoryFilter)
+            .setOnClickListener {
+                adviceHistoryStartInput.text.clear()
+                adviceHistoryEndInput.text.clear()
+                adviceViewModel.loadAdviceHistory(
+                    startDate = null,
+                    endDate = null,
+                    reset = true
+                )
+            }
+
+        loadMoreAdviceHistoryButton.setOnClickListener {
+            adviceViewModel.loadAdviceHistory(reset = false)
+        }
+
+        newChatButton.setOnClickListener {
+            messageInput.text.clear()
+            chatViewModel.startNewChat()
+            chatHistoryContainer.visibility = View.GONE
+        }
+
+        toggleChatHistoryButton.setOnClickListener {
+            val shouldShow =
+                chatHistoryContainer.visibility != View.VISIBLE
+
+            chatHistoryContainer.visibility =
+                if (shouldShow) {
+                    chatViewModel.loadConversationHistory(reset = true)
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+        }
+
+        loadMoreChatConversationsButton.setOnClickListener {
+            chatViewModel.loadConversationHistory(reset = false)
         }
 
         updateSendButtonTint()
@@ -193,6 +379,63 @@ class AiCoachActivity : AppCompatActivity() {
                 is UiState.Error -> showAdviceError(state.message)
                 is UiState.Success -> showAdvice(state.data)
             }
+        }
+    }
+
+    private fun observeAdviceHistoryState() {
+        adviceViewModel.historyState.observe(this) { state ->
+            adviceHistoryAdapter.submitItems(state.items)
+
+            adviceHistoryProgressBar.visibility =
+                if (state.isLoading) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+
+            when {
+                !state.errorMessage.isNullOrBlank() -> {
+                    adviceHistoryStatusText.visibility = View.VISIBLE
+                    adviceHistoryStatusText.text = state.errorMessage
+                    adviceHistoryStatusText.setTextColor(
+                        getColor(R.color.health_error)
+                    )
+                }
+
+                state.isEmpty -> {
+                    adviceHistoryStatusText.visibility = View.VISIBLE
+                    adviceHistoryStatusText.text =
+                        "No saved AI advice found."
+                    adviceHistoryStatusText.setTextColor(
+                        getColor(R.color.health_text_secondary)
+                    )
+                }
+
+                else -> {
+                    adviceHistoryStatusText.visibility = View.GONE
+                    adviceHistoryStatusText.text = ""
+                    adviceHistoryStatusText.setTextColor(
+                        getColor(R.color.health_text_secondary)
+                    )
+                }
+            }
+
+            loadMoreAdviceHistoryButton.visibility =
+                if (state.hasMore || state.isLoadingMore) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+
+            loadMoreAdviceHistoryButton.isEnabled =
+                !state.isLoadingMore
+
+            loadMoreAdviceHistoryButton.text =
+                if (state.isLoadingMore) {
+                    "Loading..."
+                } else {
+                    "Load More"
+                }
         }
     }
 
@@ -283,6 +526,63 @@ class AiCoachActivity : AppCompatActivity() {
                 chatErrorText.visibility = View.VISIBLE
                 chatErrorText.text = message
             }
+        }
+    }
+
+    private fun observeChatHistoryState() {
+        chatViewModel.conversationHistoryState.observe(this) { state ->
+            chatConversationAdapter.submitItems(state.items)
+
+            chatHistoryProgressBar.visibility =
+                if (state.isLoading) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+
+            when {
+                !state.errorMessage.isNullOrBlank() -> {
+                    chatHistoryStatusText.visibility = View.VISIBLE
+                    chatHistoryStatusText.text = state.errorMessage
+                    chatHistoryStatusText.setTextColor(
+                        getColor(R.color.health_error)
+                    )
+                }
+
+                state.isEmpty -> {
+                    chatHistoryStatusText.visibility = View.VISIBLE
+                    chatHistoryStatusText.text =
+                        "No saved chat conversations yet."
+                    chatHistoryStatusText.setTextColor(
+                        getColor(R.color.health_text_secondary)
+                    )
+                }
+
+                else -> {
+                    chatHistoryStatusText.visibility = View.GONE
+                    chatHistoryStatusText.text = ""
+                    chatHistoryStatusText.setTextColor(
+                        getColor(R.color.health_text_secondary)
+                    )
+                }
+            }
+
+            loadMoreChatConversationsButton.visibility =
+                if (state.hasMore || state.isLoadingMore) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+
+            loadMoreChatConversationsButton.isEnabled =
+                !state.isLoadingMore
+
+            loadMoreChatConversationsButton.text =
+                if (state.isLoadingMore) {
+                    "Loading..."
+                } else {
+                    "Load More Conversations"
+                }
         }
     }
 
