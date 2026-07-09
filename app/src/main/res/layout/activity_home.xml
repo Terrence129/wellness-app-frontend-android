@@ -39,20 +39,6 @@
                         android:gravity="center"
                         android:text="Summary"
                         android:textColor="#111111" />
-
-                    <Button
-                        android:id="@+id/btnLogout"
-                        android:layout_width="96dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="end|center_vertical"
-                        android:background="@drawable/bg_logout_button"
-                        android:minHeight="0dp"
-                        android:minWidth="0dp"
-                        android:text="Logout"
-                        android:textAllCaps="false"
-                        android:textColor="#FF3B30"
-                        android:textSize="14sp"
-                        app:backgroundTint="@null" />
                 </FrameLayout>
 
                 <TextView
@@ -144,6 +130,37 @@
                         android:background="@drawable/bg_indicator_inactive" />
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="Recent wellness logs"
+                    android:textColor="#111111"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvRecentLogsEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_card"
+                    android:gravity="center"
+                    android:padding="18dp"
+                    android:text="No records before today."
+                    android:textColor="@color/health_text_secondary"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRecentLogs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -218,7 +235,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Trends"
+                    android:gravity="center"
+                    android:text="Trend"
                     android:textColor="@color/health_text_secondary"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -243,33 +261,6 @@
             </FrameLayout>
 
             <LinearLayout
-                android:id="@+id/navHistory"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_nav_history"
-                    app:tint="@color/health_text_secondary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="History"
-                    android:textColor="@color/health_text_secondary"
-                    android:textSize="11sp" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/navAi"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -292,6 +283,33 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:text="AI"
+                    android:textColor="@color/health_text_secondary"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/navProfile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_nav_profile"
+                    app:tint="@color/health_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Profile"
                     android:textColor="@color/health_text_secondary"
                     android:textSize="11sp" />
             </LinearLayout>

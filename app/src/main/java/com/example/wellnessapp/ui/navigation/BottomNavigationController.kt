@@ -14,9 +14,9 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
 import com.example.wellnessapp.R
 import com.example.wellnessapp.ui.ai.AiCoachActivity
-import com.example.wellnessapp.ui.history.HistoryActivity
 import com.example.wellnessapp.ui.home.HomeActivity
 import com.example.wellnessapp.ui.log.AddWellnessLogActivity
+import com.example.wellnessapp.ui.profile.ProfileActivity
 import com.example.wellnessapp.ui.summary.WeeklySummaryActivity
 
 /**
@@ -26,10 +26,10 @@ object BottomNavigationController {
 
     enum class ActiveItem {
         HOME,
-        TRENDS,
+        TRENDS_HISTORY,
         ADD,
-        HISTORY,
-        AI
+        AI,
+        PROFILE
     }
 
     fun attach(
@@ -88,11 +88,11 @@ object BottomNavigationController {
         bottomNavigation.addView(
             navItem(
                 activity = activity,
-                label = "Trends",
+                label = "Trend",
                 iconRes = R.drawable.ic_nav_trends,
-                selected = activeItem == ActiveItem.TRENDS
+                selected = activeItem == ActiveItem.TRENDS_HISTORY
             ) {
-                if (activeItem != ActiveItem.TRENDS) {
+                if (activeItem != ActiveItem.TRENDS_HISTORY) {
                     activity.openTopLevel(WeeklySummaryActivity::class.java)
                 }
             }
@@ -123,24 +123,24 @@ object BottomNavigationController {
         bottomNavigation.addView(
             navItem(
                 activity = activity,
-                label = "History",
-                iconRes = R.drawable.ic_nav_history,
-                selected = activeItem == ActiveItem.HISTORY
-            ) {
-                if (activeItem != ActiveItem.HISTORY) {
-                    activity.openTopLevel(HistoryActivity::class.java)
-                }
-            }
-        )
-        bottomNavigation.addView(
-            navItem(
-                activity = activity,
                 label = "AI",
                 iconRes = R.drawable.ic_nav_ai,
                 selected = activeItem == ActiveItem.AI
             ) {
                 if (activeItem != ActiveItem.AI) {
                     activity.openTopLevel(AiCoachActivity::class.java)
+                }
+            }
+        )
+        bottomNavigation.addView(
+            navItem(
+                activity = activity,
+                label = "Profile",
+                iconRes = R.drawable.ic_nav_profile,
+                selected = activeItem == ActiveItem.PROFILE
+            ) {
+                if (activeItem != ActiveItem.PROFILE) {
+                    activity.openTopLevel(ProfileActivity::class.java)
                 }
             }
         )
@@ -186,6 +186,7 @@ object BottomNavigationController {
                     ).apply {
                         topMargin = activity.dp(2)
                     }
+                    gravity = Gravity.CENTER
                     text = label
                     setTextColor(tint)
                     textSize = 11f

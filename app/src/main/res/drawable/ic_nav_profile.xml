@@ -6,14 +6,14 @@
     android:viewportHeight="24">
     <path
         android:fillColor="@android:color/transparent"
-        android:pathData="M12,5A7,7 0,1 0,12,19A7,7 0,1 0,12,5"
+        android:pathData="M12,12A3.5,3.5 0,1 0,12,5A3.5,3.5 0,1 0,12,12"
         android:strokeColor="@color/health_text_secondary"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"
         android:strokeWidth="1.7" />
     <path
         android:fillColor="@android:color/transparent"
-        android:pathData="M12,8v4l3,1.8"
+        android:pathData="M5,20A7,7 0,0 1,19 20"
         android:strokeColor="@color/health_text_secondary"
         android:strokeLineCap="round"
         android:strokeLineJoin="round"

@@ -12,6 +12,9 @@ import com.example.wellnessapp.data.model.UserResponse
 import com.example.wellnessapp.data.model.WellnessLogResponse
 import com.example.wellnessapp.data.repository.UserRepository
 import com.example.wellnessapp.data.repository.WellnessRepository
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import kotlinx.coroutines.launch
 
 /**
@@ -23,6 +26,8 @@ class HomeViewModel(
     private val userRepository: UserRepository,
     private val wellnessRepository: WellnessRepository
 ) : ViewModel() {
+
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     private val _uiState = MutableLiveData<HomeUiState>()
     val uiState: LiveData<HomeUiState> = _uiState
@@ -43,15 +48,32 @@ class HomeViewModel(
                     if (logResponse.success) logResponse.data else null
                 }.getOrNull()
 
+                val recentLogs = runCatching {
+                    wellnessRepository.getWellnessLogs(
+                        startDate = daysBefore(today, 7),
+                        endDate = daysBefore(today, 1)
+                    ).data.orEmpty().sortedByDescending { it.logDate }
+                }.getOrDefault(emptyList())
+
                 _uiState.value = HomeUiState.Success(
                     user = userResponse.data,
                     today = today,
-                    todayLog = todayLog
+                    todayLog = todayLog,
+                    recentLogs = recentLogs
                 )
             } catch (error: Exception) {
                 _uiState.value = HomeUiState.Error(error.message ?: "Unable to load home data.")
             }
         }
+    }
+
+    private fun daysBefore(date: String, days: Int): String {
+        val calendar = Calendar.getInstance()
+        runCatching { dateFormat.parse(date) }.getOrNull()?.let {
+            calendar.time = it
+        }
+        calendar.add(Calendar.DAY_OF_YEAR, -days)
+        return dateFormat.format(calendar.time)
     }
 
     /**
@@ -73,7 +95,8 @@ sealed class HomeUiState {
     data class Success(
         val user: UserResponse,
         val today: String,
-        val todayLog: WellnessLogResponse?
+        val todayLog: WellnessLogResponse?,
+        val recentLogs: List<WellnessLogResponse>
     ) : HomeUiState()
 
     data class Error(val message: String) : HomeUiState()

@@ -6,23 +6,25 @@ package com.example.wellnessapp.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wellnessapp.R
-import com.example.wellnessapp.data.local.TokenManager
+import com.example.wellnessapp.data.model.WellnessLogResponse
 import com.example.wellnessapp.data.repository.UserRepository
 import com.example.wellnessapp.data.repository.WellnessRepository
 import com.example.wellnessapp.ui.ai.AiCoachActivity
-import com.example.wellnessapp.ui.auth.LoginActivity
-import com.example.wellnessapp.ui.history.HistoryActivity
+import com.example.wellnessapp.ui.history.WellnessLogAdapter
+import com.example.wellnessapp.ui.history.WellnessLogDetailActivity
+import com.example.wellnessapp.ui.log.EditWellnessLogActivity
 import com.example.wellnessapp.ui.log.AddWellnessLogActivity
+import com.example.wellnessapp.ui.profile.ProfileActivity
 import com.example.wellnessapp.ui.summary.WeeklySummaryActivity
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -48,9 +50,12 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var errorText: TextView
     private lateinit var progressBar: ProgressBar
     private lateinit var pinnedCards: RecyclerView
+    private lateinit var recentLogsList: RecyclerView
+    private lateinit var recentLogsEmptyText: TextView
     private lateinit var profileDot: View
     private lateinit var todayDot: View
     private val pinnedAdapter = PinnedCarouselAdapter()
+    private lateinit var recentLogsAdapter: WellnessLogAdapter
     private val snapHelper = PagerSnapHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +64,7 @@ class HomeActivity : AppCompatActivity() {
 
         bindViews()
         setupPinnedCarousel()
+        setupRecentLogs()
         setupActions()
         observeViewModel()
     }
@@ -74,6 +80,8 @@ class HomeActivity : AppCompatActivity() {
         errorText = findViewById(R.id.tvHomeError)
         progressBar = findViewById(R.id.progressHome)
         pinnedCards = findViewById(R.id.rvPinnedCards)
+        recentLogsList = findViewById(R.id.rvRecentLogs)
+        recentLogsEmptyText = findViewById(R.id.tvRecentLogsEmpty)
         profileDot = findViewById(R.id.dotProfile)
         todayDot = findViewById(R.id.dotToday)
     }
@@ -92,6 +100,22 @@ class HomeActivity : AppCompatActivity() {
         })
     }
 
+    private fun setupRecentLogs() {
+        recentLogsAdapter = WellnessLogAdapter(
+            onItemClick = { log ->
+                startActivity(
+                    Intent(this, WellnessLogDetailActivity::class.java)
+                        .putExtra(WellnessLogDetailActivity.EXTRA_LOG_ID, log.id)
+                        .putExtra(WellnessLogDetailActivity.EXTRA_LOG_DATE, log.logDate)
+                )
+            },
+            onEditClick = { log -> openEdit(log) },
+            onDeleteClick = { log -> confirmDelete(log) }
+        )
+        recentLogsList.layoutManager = LinearLayoutManager(this)
+        recentLogsList.adapter = recentLogsAdapter
+    }
+
     private fun setupActions() {
         findViewById<View>(R.id.navHome).setOnClickListener {
             pinnedCards.smoothScrollToPosition(PinnedCarouselAdapter.PROFILE_POSITION)
@@ -101,17 +125,8 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, AddWellnessLogActivity::class.java))
         }
 
-        findViewById<View>(R.id.navHistory).setOnClickListener {
-            startActivity(Intent(this, HistoryActivity::class.java))
-        }
-
         findViewById<View>(R.id.navTrends).setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    WeeklySummaryActivity::class.java
-                )
-            )
+            startActivity(Intent(this, WeeklySummaryActivity::class.java))
         }
 
         findViewById<View>(R.id.navAi).setOnClickListener {
@@ -122,8 +137,8 @@ class HomeActivity : AppCompatActivity() {
                 )
             )
         }
-        findViewById<Button>(R.id.btnLogout).setOnClickListener {
-            logout()
+        findViewById<View>(R.id.navProfile).setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
     }
 
@@ -149,6 +164,9 @@ class HomeActivity : AppCompatActivity() {
         welcomeText.text = getString(R.string.home_welcome_format, state.user.username)
         todayDateText.text = state.today
         pinnedAdapter.submitData(state.user, state.todayLog)
+        recentLogsAdapter.submitLogs(state.recentLogs)
+        recentLogsList.visibility = if (state.recentLogs.isEmpty()) View.GONE else View.VISIBLE
+        recentLogsEmptyText.visibility = if (state.recentLogs.isEmpty()) View.VISIBLE else View.GONE
         updatePinnedIndicator(currentPinnedPosition())
     }
 
@@ -158,14 +176,41 @@ class HomeActivity : AppCompatActivity() {
         errorText.text = message
     }
 
-    private fun logout() {
+    private fun openEdit(log: WellnessLogResponse) {
+        val intent = Intent(this, EditWellnessLogActivity::class.java).apply {
+            putExtra(EditWellnessLogActivity.EXTRA_LOG_ID, log.id)
+            putExtra(EditWellnessLogActivity.EXTRA_LOG_DATE, log.logDate)
+            log.sleepHours?.let { putExtra(EditWellnessLogActivity.EXTRA_SLEEP_HOURS, it) }
+            log.moodScore?.let { putExtra(EditWellnessLogActivity.EXTRA_MOOD_SCORE, it) }
+            log.waterCups?.let { putExtra(EditWellnessLogActivity.EXTRA_WATER_CUPS, it) }
+            log.steps?.let { putExtra(EditWellnessLogActivity.EXTRA_STEPS, it) }
+            log.exerciseMinutes?.let { putExtra(EditWellnessLogActivity.EXTRA_EXERCISE_MINUTES, it) }
+            putExtra(EditWellnessLogActivity.EXTRA_NOTE, log.note.orEmpty())
+        }
+        startActivity(intent)
+    }
+
+    private fun confirmDelete(log: WellnessLogResponse) {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.delete_log_title)
+            .setMessage(R.string.delete_log_message)
+            .setPositiveButton(R.string.delete) { _, _ -> deleteLog(log.id) }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun deleteLog(id: Long) {
         lifecycleScope.launch {
-            TokenManager(this@HomeActivity).clearToken()
-            val intent = Intent(this@HomeActivity, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            try {
+                val response = WellnessRepository(applicationContext).deleteWellnessLog(id)
+                if (response.success) {
+                    viewModel.loadHome(currentDate())
+                } else {
+                    showError(response.message.ifBlank { "Unable to delete wellness log." })
+                }
+            } catch (error: Exception) {
+                showError(error.message ?: "Unable to delete wellness log.")
             }
-            startActivity(intent)
-            finish()
         }
     }
 
