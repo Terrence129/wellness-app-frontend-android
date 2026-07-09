@@ -3,14 +3,17 @@
 package com.example.wellnessapp.ui.log
 
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.NumberPicker
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
@@ -39,6 +42,8 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
     private val userRepository by lazy { UserRepository(applicationContext) }
 
     private lateinit var profilePrefs: SharedPreferences
+    private lateinit var stepProgress: LinearLayout
+    private lateinit var bodyProfileSection: LinearLayout
     private lateinit var bodyFormContent: LinearLayout
     private lateinit var bodySummaryRow: LinearLayout
     private lateinit var dailyLogSection: LinearLayout
@@ -51,6 +56,7 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
     private lateinit var buttonContinueToLog: Button
     private lateinit var buttonEditBodyProfile: Button
     private lateinit var textBodySummary: TextView
+    private lateinit var textScreenTitle: TextView
     private lateinit var textStepHint: TextView
     private lateinit var stepBodyCircle: TextView
     private lateinit var stepBodyText: TextView
@@ -67,6 +73,7 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
     private lateinit var buttonSubmitLog: Button
     private lateinit var textError: TextView
     private lateinit var progressBar: ProgressBar
+    private var editBodyProfileOnly = false
 
     private val genderOptions = listOf(
         SelectionOption("Select gender", ""),
@@ -88,16 +95,21 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
         setContentView(R.layout.activity_add_wellness_log)
 
         profilePrefs = getSharedPreferences(PROFILE_PREFS_NAME, MODE_PRIVATE)
+        editBodyProfileOnly = intent.getBooleanExtra(EXTRA_EDIT_BODY_PROFILE, false)
         bindViews()
         setupSpinners()
         setupInitialDate()
         setupInitialStep()
         setupListeners()
-        BottomNavigationController.attach(this, ActiveItem.ADD)
+        if (!editBodyProfileOnly) {
+            BottomNavigationController.attach(this, ActiveItem.ADD)
+        }
         observeState()
     }
 
     private fun bindViews() {
+        stepProgress = findViewById(R.id.stepProgress)
+        bodyProfileSection = findViewById(R.id.bodyProfileSection)
         bodyFormContent = findViewById(R.id.bodyFormContent)
         bodySummaryRow = findViewById(R.id.bodySummaryRow)
         dailyLogSection = findViewById(R.id.dailyLogSection)
@@ -110,6 +122,7 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
         buttonContinueToLog = findViewById(R.id.buttonContinueToLog)
         buttonEditBodyProfile = findViewById(R.id.buttonEditBodyProfile)
         textBodySummary = findViewById(R.id.textBodySummary)
+        textScreenTitle = findViewById(R.id.textScreenTitle)
         textStepHint = findViewById(R.id.textStepHint)
         stepBodyCircle = findViewById(R.id.stepBodyCircle)
         stepBodyText = findViewById(R.id.stepBodyText)
@@ -160,10 +173,18 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
     }
 
     private fun setupInitialStep() {
+        if (editBodyProfileOnly) {
+            textScreenTitle.text = "Body profile"
+            getSavedBodyProfile()?.let { bindBodyProfileInputs(it) }
+            showBodyProfileStep(showFlow = false, editOnly = true)
+            loadBodyProfileFromBackend()
+            return
+        }
+
         getSavedBodyProfile()?.let { profile ->
             bindBodyProfileInputs(profile)
-            showDailyLogStep(profile)
-        } ?: showBodyProfileStep()
+            showDailyLogOnly()
+        } ?: showBodyProfileStep(showFlow = true)
         loadBodyProfileFromBackend()
     }
 
@@ -182,7 +203,7 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
             getSavedBodyProfile()?.let { profile ->
                 bindBodyProfileInputs(profile)
             }
-            showBodyProfileStep()
+            showBodyProfileStep(showFlow = false, editOnly = true)
         }
 
         buttonSubmitLog.setOnClickListener {
@@ -240,32 +261,127 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
     }
 
     private fun showBirthDatePicker() {
-        showDatePicker(
-            target = inputDateOfBirth,
-            maxDate = Calendar.getInstance().timeInMillis - ONE_DAY_MILLIS,
-            dialogTheme = R.style.WellnessBirthDatePickerDialog
-        )
+        val maxDate = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, -1)
+        }
+        val selected = Calendar.getInstance().apply {
+            set(2000, Calendar.JANUARY, 1)
+            parseExistingDate(inputDateOfBirth.text.toString())?.let {
+                set(it[0], it[1] - 1, it[2])
+            }
+        }
+
+        val yearPicker = numberPicker(1900, maxDate.get(Calendar.YEAR), selected.get(Calendar.YEAR))
+        val monthPicker = numberPicker(1, 12, selected.get(Calendar.MONTH) + 1)
+        val dayPicker = numberPicker(1, 31, selected.get(Calendar.DAY_OF_MONTH))
+
+        fun updateRanges() {
+            val maxMonth = if (yearPicker.value == maxDate.get(Calendar.YEAR)) {
+                maxDate.get(Calendar.MONTH) + 1
+            } else {
+                12
+            }
+            monthPicker.maxValue = maxMonth
+            if (monthPicker.value > maxMonth) monthPicker.value = maxMonth
+
+            val selectedMonth = monthPicker.value - 1
+            val daysInMonth = Calendar.getInstance().apply {
+                set(yearPicker.value, selectedMonth, 1)
+            }.getActualMaximum(Calendar.DAY_OF_MONTH)
+            val maxDay = if (
+                yearPicker.value == maxDate.get(Calendar.YEAR) &&
+                selectedMonth == maxDate.get(Calendar.MONTH)
+            ) {
+                maxDate.get(Calendar.DAY_OF_MONTH)
+            } else {
+                daysInMonth
+            }
+            dayPicker.maxValue = maxDay
+            if (dayPicker.value > maxDay) dayPicker.value = maxDay
+        }
+
+        yearPicker.setOnValueChangedListener { _, _, _ -> updateRanges() }
+        monthPicker.setOnValueChangedListener { _, _, _ -> updateRanges() }
+        updateRanges()
+
+        val pickerRow = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            addView(pickerColumn("Year", yearPicker))
+            addView(pickerColumn("Month", monthPicker))
+            addView(pickerColumn("Day", dayPicker))
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Date of birth")
+            .setView(pickerRow)
+            .setPositiveButton("OK") { _, _ ->
+                inputDateOfBirth.setText(
+                    String.format(
+                        Locale.US,
+                        "%04d-%02d-%02d",
+                        yearPicker.value,
+                        monthPicker.value,
+                        dayPicker.value
+                    )
+                )
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
-    private fun showDatePicker(target: EditText, maxDate: Long, dialogTheme: Int = 0) {
+    private fun showDatePicker(target: EditText, maxDate: Long) {
         val calendar = Calendar.getInstance()
         parseExistingDate(target.text.toString())?.let {
             calendar.set(it[0], it[1] - 1, it[2])
         }
 
-        DatePickerDialog(
+        val dialog = DatePickerDialog(
             this,
-            dialogTheme,
-            { _, year, month, dayOfMonth ->
-                val date = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth)
-                target.setText(date)
-            },
+            null,
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         ).apply {
             datePicker.maxDate = maxDate
-        }.show()
+            setButton(DialogInterface.BUTTON_POSITIVE, "OK") { _, _ ->
+                val date = String.format(
+                    Locale.US,
+                    "%04d-%02d-%02d",
+                    datePicker.year,
+                    datePicker.month + 1,
+                    datePicker.dayOfMonth
+                )
+                target.setText(date)
+            }
+            setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel") { picker, _ ->
+                picker.cancel()
+            }
+        }
+        dialog.show()
+    }
+
+    private fun numberPicker(min: Int, max: Int, value: Int): NumberPicker {
+        return NumberPicker(this).apply {
+            minValue = min
+            maxValue = max
+            this.value = value.coerceIn(min, max)
+            wrapSelectorWheel = false
+        }
+    }
+
+    private fun pickerColumn(label: String, picker: NumberPicker): LinearLayout {
+        return LinearLayout(this).apply {
+            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            gravity = android.view.Gravity.CENTER
+            orientation = LinearLayout.VERTICAL
+            addView(TextView(this@AddWellnessLogActivity).apply {
+                gravity = android.view.Gravity.CENTER
+                text = label
+                textSize = 13f
+                setTextColor(getColor(R.color.health_text_secondary))
+            })
+            addView(picker)
+        }
     }
 
     private fun validateBodyProfile(): BodyProfile? {
@@ -311,7 +427,12 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
                     val savedProfile = BodyProfile.fromResponse(personalInfo)
                     saveBodyProfile(savedProfile)
                     bindBodyProfileInputs(savedProfile)
-                    showDailyLogStep(savedProfile)
+                    if (editBodyProfileOnly) {
+                        Toast.makeText(this@AddWellnessLogActivity, "Body profile saved", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        showDailyLogStep(savedProfile)
+                    }
                 } else {
                     showInlineError(
                         ErrorMessageMapper.fromBackendMessage(
@@ -343,7 +464,9 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
                     val profile = BodyProfile.fromResponse(personalInfo)
                     saveBodyProfile(profile)
                     bindBodyProfileInputs(profile)
-                    showDailyLogStep(profile)
+                    if (!editBodyProfileOnly) {
+                        showDailyLogOnly()
+                    }
                 }
             }.onFailure { throwable ->
                 if (throwable is HttpException && throwable.code() == 404) {
@@ -391,24 +514,46 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
         )
     }
 
-    private fun showBodyProfileStep() {
+    private fun showBodyProfileStep(showFlow: Boolean, editOnly: Boolean = false) {
+        stepProgress.visibility = if (showFlow) View.VISIBLE else View.GONE
+        textStepHint.visibility = View.VISIBLE
+        bodyProfileSection.visibility = View.VISIBLE
         bodyFormContent.visibility = View.VISIBLE
         bodySummaryRow.visibility = View.GONE
         dailyLogSection.visibility = View.GONE
-        textStepHint.text = "Start with your body profile, then add today's log."
+        textStepHint.text = if (editOnly) {
+            "Update your body profile."
+        } else {
+            "Start with your body profile, then add today's log."
+        }
+        buttonContinueToLog.text = if (editOnly) "Save profile" else "Continue"
         buttonSubmitLog.isEnabled = false
-        updateStepIndicator(isDailyStep = false)
+        if (showFlow) {
+            updateStepIndicator(isDailyStep = false)
+        }
         textError.visibility = View.GONE
     }
 
     private fun showDailyLogStep(profile: BodyProfile) {
         updateBodySummary(profile)
+        stepProgress.visibility = View.VISIBLE
+        textStepHint.visibility = View.VISIBLE
+        bodyProfileSection.visibility = View.VISIBLE
         bodyFormContent.visibility = View.GONE
         bodySummaryRow.visibility = View.VISIBLE
         dailyLogSection.visibility = View.VISIBLE
         textStepHint.text = "Body profile saved. Add the signals that changed today."
         buttonSubmitLog.isEnabled = true
         updateStepIndicator(isDailyStep = true)
+        textError.visibility = View.GONE
+    }
+
+    private fun showDailyLogOnly() {
+        stepProgress.visibility = View.GONE
+        textStepHint.visibility = View.GONE
+        bodyProfileSection.visibility = View.GONE
+        dailyLogSection.visibility = View.VISIBLE
+        buttonSubmitLog.isEnabled = true
         textError.visibility = View.GONE
     }
 
@@ -524,7 +669,7 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
         val value: String
     )
 
-    private companion object {
+    companion object {
         const val PROFILE_PREFS_NAME = "wellness_body_profile"
         const val KEY_HEIGHT_CM = "height_cm"
         const val KEY_WEIGHT_KG = "weight_kg"
@@ -532,5 +677,6 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
         const val KEY_DATE_OF_BIRTH = "date_of_birth"
         const val KEY_ACTIVITY_LEVEL = "activity_level"
         const val ONE_DAY_MILLIS = 24 * 60 * 60 * 1000L
+        const val EXTRA_EDIT_BODY_PROFILE = "extra_edit_body_profile"
     }
 }

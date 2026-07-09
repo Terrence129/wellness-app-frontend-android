@@ -67,8 +67,11 @@ class ProfileActivity : AppCompatActivity() {
     private fun bindActions() {
         findViewById<View>(R.id.btnProfileBack).setOnClickListener { finish() }
         findViewById<View>(R.id.cardAccount).setOnClickListener { showAccountDetails() }
-        findViewById<View>(R.id.cardBodyProfile).setOnClickListener {
-            startActivity(Intent(this, AddWellnessLogActivity::class.java))
+        findViewById<View>(R.id.btnEditBodyProfile).setOnClickListener {
+            startActivity(
+                Intent(this, AddWellnessLogActivity::class.java)
+                    .putExtra(AddWellnessLogActivity.EXTRA_EDIT_BODY_PROFILE, true)
+            )
         }
         findViewById<View>(R.id.cardWellnessData).setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))

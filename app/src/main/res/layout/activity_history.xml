@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="All Wellness Data"
+            android:text="Wellness Logs"
             android:textColor="#111111" />
     </FrameLayout>
 
@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="center"
-            android:text="No wellness records found."
+            android:text="No wellness logs found."
             android:textColor="#6F7078"
             android:textSize="15sp" />
     </LinearLayout>
