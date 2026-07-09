@@ -242,11 +242,12 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
     private fun showBirthDatePicker() {
         showDatePicker(
             target = inputDateOfBirth,
-            maxDate = Calendar.getInstance().timeInMillis - ONE_DAY_MILLIS
+            maxDate = Calendar.getInstance().timeInMillis - ONE_DAY_MILLIS,
+            dialogTheme = R.style.WellnessBirthDatePickerDialog
         )
     }
 
-    private fun showDatePicker(target: EditText, maxDate: Long) {
+    private fun showDatePicker(target: EditText, maxDate: Long, dialogTheme: Int = 0) {
         val calendar = Calendar.getInstance()
         parseExistingDate(target.text.toString())?.let {
             calendar.set(it[0], it[1] - 1, it[2])
@@ -254,6 +255,7 @@ class `AddWellnessLogActivity` : AppCompatActivity() {
 
         DatePickerDialog(
             this,
+            dialogTheme,
             { _, year, month, dayOfMonth ->
                 val date = String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, dayOfMonth)
                 target.setText(date)

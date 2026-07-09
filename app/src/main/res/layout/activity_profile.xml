@@ -146,7 +146,8 @@
                     android:text="Incomplete"
                     android:textColor="@color/health_mint"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -214,12 +215,12 @@
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="18dp">
+            android:padding="14dp">
 
             <ImageView
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:src="@drawable/ic_nav_calendar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_nav_history"
                 app:tint="@color/health_mint" />
 
             <LinearLayout
@@ -232,7 +233,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Wellness data"
+                    android:text="History"
                     android:textColor="#111111"
                     android:textSize="18sp"
                     android:textStyle="bold" />

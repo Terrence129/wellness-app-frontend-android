@@ -18,8 +18,8 @@ import com.example.wellnessapp.data.repository.UserRepository
 import com.example.wellnessapp.data.repository.WellnessRepository
 import com.example.wellnessapp.ui.ai.AiCoachActivity
 import com.example.wellnessapp.ui.log.AddWellnessLogActivity
-import com.example.wellnessapp.ui.navigation.TrendsHistoryActivity
 import com.example.wellnessapp.ui.profile.ProfileActivity
+import com.example.wellnessapp.ui.summary.WeeklySummaryActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -97,7 +97,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.navTrends).setOnClickListener {
-            startActivity(Intent(this, TrendsHistoryActivity::class.java))
+            startActivity(Intent(this, WeeklySummaryActivity::class.java))
         }
 
         findViewById<View>(R.id.navAi).setOnClickListener {

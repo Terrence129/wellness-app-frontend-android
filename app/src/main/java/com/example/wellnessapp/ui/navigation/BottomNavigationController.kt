@@ -17,6 +17,7 @@ import com.example.wellnessapp.ui.ai.AiCoachActivity
 import com.example.wellnessapp.ui.home.HomeActivity
 import com.example.wellnessapp.ui.log.AddWellnessLogActivity
 import com.example.wellnessapp.ui.profile.ProfileActivity
+import com.example.wellnessapp.ui.summary.WeeklySummaryActivity
 
 /**
  * Adds the app's persistent bottom navigation to authenticated screens.
@@ -87,12 +88,12 @@ object BottomNavigationController {
         bottomNavigation.addView(
             navItem(
                 activity = activity,
-                label = "Trends\nHistory",
-                iconRes = R.drawable.ic_nav_calendar,
+                label = "Trend",
+                iconRes = R.drawable.ic_nav_trends,
                 selected = activeItem == ActiveItem.TRENDS_HISTORY
             ) {
                 if (activeItem != ActiveItem.TRENDS_HISTORY) {
-                    activity.openTopLevel(TrendsHistoryActivity::class.java)
+                    activity.openTopLevel(WeeklySummaryActivity::class.java)
                 }
             }
         )

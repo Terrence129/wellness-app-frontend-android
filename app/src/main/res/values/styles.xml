@@ -32,4 +32,13 @@
     <style name="Widget.Wellness.MaterialButton" parent="Widget.Material3.Button">
         <item name="backgroundTint">@color/classic_gray</item>
     </style>
+
+    <style name="WellnessBirthDatePickerDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:datePickerStyle">@style/WellnessBirthDatePicker</item>
+    </style>
+
+    <style name="WellnessBirthDatePicker" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+        <item name="android:calendarViewShown">false</item>
+    </style>
 </resources>

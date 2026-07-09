@@ -72,62 +72,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@drawable/bg_card"
-            android:elevation="2dp"
             android:orientation="vertical"
-            android:padding="18dp"
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/tvDaysWithLogs"
+                android:id="@+id/tvTips"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="18sp" />
+                android:background="@drawable/bg_card"
+                android:elevation="2dp"
+                android:padding="18dp"
+                android:textColor="#34343A"
+                android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/tvAverageSleep"
+            <LinearLayout
+                android:id="@+id/chartList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tvAverageMood"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tvAverageWater"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tvTotalSteps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tvTotalExercise"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tvSummary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:padding="16dp"
-                android:textSize="18sp"
-                android:textStyle="italic" />
+                android:layout_marginTop="14dp"
+                android:orientation="vertical" />
 
         </LinearLayout>
 

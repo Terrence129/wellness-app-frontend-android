@@ -14,10 +14,10 @@ import com.example.wellnessapp.data.model.PersonalInfoResponse
 import com.example.wellnessapp.data.model.UserResponse
 import com.example.wellnessapp.data.repository.UserRepository
 import com.example.wellnessapp.ui.auth.LoginActivity
+import com.example.wellnessapp.ui.history.HistoryActivity
 import com.example.wellnessapp.ui.log.AddWellnessLogActivity
 import com.example.wellnessapp.ui.navigation.BottomNavigationController
 import com.example.wellnessapp.ui.navigation.BottomNavigationController.ActiveItem
-import com.example.wellnessapp.ui.navigation.TrendsHistoryActivity
 import java.util.Locale
 import kotlinx.coroutines.launch
 
@@ -71,7 +71,7 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(Intent(this, AddWellnessLogActivity::class.java))
         }
         findViewById<View>(R.id.cardWellnessData).setOnClickListener {
-            startActivity(Intent(this, TrendsHistoryActivity::class.java))
+            startActivity(Intent(this, HistoryActivity::class.java))
         }
         findViewById<View>(R.id.cardLogout).setOnClickListener { logout() }
     }
