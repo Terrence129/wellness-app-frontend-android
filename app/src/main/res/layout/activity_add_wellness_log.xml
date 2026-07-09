@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2F7"
+    android:background="@color/health_background"
     android:fillViewport="true">
 
     <LinearLayout
@@ -17,16 +17,13 @@
         android:paddingEnd="22dp"
         android:paddingBottom="32dp">
 
-        <FrameLayout
-            style="@style/WellnessHeaderBar">
+        <FrameLayout style="@style/WellnessHeaderBar">
 
             <ImageButton
                 android:id="@+id/btnBack"
                 style="@style/WellnessBackButton"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
                 android:layout_gravity="start|center_vertical"
-                app:tint="#111111" />
+                app:tint="@color/health_text_primary" />
 
             <TextView
                 style="@style/WellnessHeaderTitle"
@@ -34,12 +31,80 @@
         </FrameLayout>
 
         <TextView
+            android:id="@+id/textStepHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Start with your body profile, then add today's log."
+            android:textColor="@color/health_text_secondary"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/stepProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/stepBodyCircle"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/stepBodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Body"
+                android:textColor="@color/health_text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/stepConnector"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_weight="1"
+                android:background="#D7DADF" />
+
+            <TextView
+                android:id="@+id/stepLogCircle"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="@color/health_text_secondary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/stepLogText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Daily log"
+                android:textColor="@color/health_text_secondary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
             android:id="@+id/textError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
-            android:textColor="#FF3B30"
+            android:textColor="@color/health_error"
             android:textSize="14sp"
             android:visibility="gone" />
 
@@ -52,26 +117,252 @@
             android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/bodyProfileSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:background="@drawable/bg_card"
-            android:elevation="2dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_flow_card"
+            android:elevation="1dp"
             android:orientation="vertical"
             android:padding="18dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Body profile"
+                android:textColor="@color/health_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Saved once for better wellness context. You can edit it anytime."
+                android:textColor="@color/health_text_secondary"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/bodySummaryRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_flow_summary"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="14dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/textBodySummary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/health_text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/buttonEditBodyProfile"
+                    android:layout_width="84dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_outline_button"
+                    android:backgroundTint="@null"
+                    android:text="Edit"
+                    android:textAllCaps="false"
+                    android:textColor="@color/function_button_background"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bodyFormContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Height"
+                    android:textColor="@color/health_text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/inputHeightCm"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_flow_input"
+                    android:hint="cm, example: 172"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:textColor="@color/health_text_primary"
+                    android:textColorHint="@color/health_text_secondary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Weight"
+                    android:textColor="@color/health_text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/inputWeightKg"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_flow_input"
+                    android:hint="kg, example: 65"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:textColor="@color/health_text_primary"
+                    android:textColorHint="@color/health_text_secondary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Gender"
+                    android:textColor="@color/health_text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_flow_input"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Date of birth"
+                    android:textColor="@color/health_text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/inputDateOfBirth"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_flow_input"
+                        android:focusable="false"
+                        android:hint="YYYY-MM-DD"
+                        android:inputType="date"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:textColor="@color/health_text_primary"
+                        android:textColorHint="@color/health_text_secondary"
+                        android:textSize="16sp" />
+
+                    <Button
+                        android:id="@+id/buttonPickDateOfBirth"
+                        android:layout_width="92dp"
+                        android:layout_height="52dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/bg_primary_button"
+                        android:backgroundTint="@null"
+                        android:text="Pick"
+                        android:textAllCaps="false"
+                        android:textColor="@color/function_button_text"
+                        android:textStyle="bold"
+                        app:backgroundTint="@null" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Activity level"
+                    android:textColor="@color/health_text_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerActivityLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_flow_input"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp" />
+
+                <Button
+                    android:id="@+id/buttonContinueToLog"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_primary_button"
+                    android:backgroundTint="@null"
+                    android:text="Continue"
+                    android:textAllCaps="false"
+                    android:textColor="@color/function_button_text"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dailyLogSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_flow_card"
+            android:elevation="1dp"
+            android:orientation="vertical"
+            android:padding="18dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Daily check-in"
+                android:textColor="@color/health_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Record the signals that changed today."
+                android:textColor="@color/health_text_secondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
                 android:text="Date"
-                android:textColor="#0A84FF"
-                android:textSize="18sp"
+                android:textColor="@color/health_text_primary"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="8dp"
                 android:orientation="horizontal">
 
                 <EditText
@@ -79,21 +370,21 @@
                     android:layout_width="0dp"
                     android:layout_height="52dp"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_input"
+                    android:background="@drawable/bg_flow_input"
                     android:focusable="false"
                     android:hint="YYYY-MM-DD"
                     android:inputType="date"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
-                    android:textColor="#111111"
-                    android:textColorHint="#8E8E93"
+                    android:textColor="@color/health_text_primary"
+                    android:textColorHint="@color/health_text_secondary"
                     android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/buttonPickDate"
-                    android:layout_width="96dp"
+                    android:layout_width="92dp"
                     android:layout_height="52dp"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="10dp"
                     android:background="@drawable/bg_primary_button"
                     android:backgroundTint="@null"
                     android:text="Pick"
@@ -102,194 +393,175 @@
                     android:textStyle="bold"
                     app:backgroundTint="@null" />
             </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/bg_card"
-            android:elevation="2dp"
-            android:orientation="vertical"
-            android:padding="18dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Health Summary"
-                android:textColor="#0A84FF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Sleep Hours"
-                android:textColor="#111111"
-                android:textSize="15sp"
+                android:layout_marginTop="18dp"
+                android:text="Sleep hours"
+                android:textColor="@color/health_text_primary"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/inputSleepHours"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:background="@drawable/bg_input"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_flow_input"
                 android:hint="Example: 8"
                 android:inputType="numberDecimal"
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
-                android:textColor="#111111"
-                android:textColorHint="#8E8E93"
+                android:textColor="@color/health_text_primary"
+                android:textColorHint="@color/health_text_secondary"
                 android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Mood Score"
-                android:textColor="#111111"
-                android:textSize="15sp"
+                android:layout_marginTop="18dp"
+                android:text="Mood score"
+                android:textColor="@color/health_text_primary"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spinnerMoodScore"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:background="@drawable/bg_input"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_flow_input"
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Water"
+                        android:textColor="@color/health_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/inputWaterCups"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_flow_input"
+                        android:hint="Cups"
+                        android:inputType="number"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:textColor="@color/health_text_primary"
+                        android:textColorHint="@color/health_text_secondary"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Exercise"
+                        android:textColor="@color/health_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/inputExerciseMinutes"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_flow_input"
+                        android:hint="Minutes"
+                        android:inputType="number"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:textColor="@color/health_text_primary"
+                        android:textColorHint="@color/health_text_secondary"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Water Cups"
-                android:textColor="#111111"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/inputWaterCups"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:background="@drawable/bg_input"
-                android:hint="Example: 6"
-                android:inputType="number"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:textColor="#111111"
-                android:textColorHint="#8E8E93"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/bg_card"
-            android:elevation="2dp"
-            android:orientation="vertical"
-            android:padding="18dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Activity"
-                android:textColor="#0A84FF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="18dp"
                 android:text="Steps"
-                android:textColor="#111111"
-                android:textSize="15sp"
+                android:textColor="@color/health_text_primary"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/inputSteps"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:background="@drawable/bg_input"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_flow_input"
                 android:hint="Example: 8000"
                 android:inputType="number"
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
-                android:textColor="#111111"
-                android:textColorHint="#8E8E93"
+                android:textColor="@color/health_text_primary"
+                android:textColorHint="@color/health_text_secondary"
                 android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Exercise Minutes"
-                android:textColor="#111111"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/inputExerciseMinutes"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:background="@drawable/bg_input"
-                android:hint="Example: 30"
-                android:inputType="number"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:textColor="#111111"
-                android:textColorHint="#8E8E93"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/bg_card"
-            android:elevation="2dp"
-            android:orientation="vertical"
-            android:padding="18dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
                 android:text="Notes"
-                android:textColor="#111111"
-                android:textSize="15sp"
+                android:textColor="@color/health_text_primary"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/inputNote"
                 android:layout_width="match_parent"
-                android:layout_height="96dp"
+                android:layout_height="92dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/bg_input"
+                android:background="@drawable/bg_flow_input"
                 android:gravity="top"
                 android:hint="Optional note"
                 android:inputType="textMultiLine"
                 android:padding="14dp"
-                android:textColor="#111111"
-                android:textColorHint="#8E8E93"
+                android:textColor="@color/health_text_primary"
+                android:textColorHint="@color/health_text_secondary"
                 android:textSize="16sp" />
-        </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonSubmitLog"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/bg_primary_button"
-            android:backgroundTint="@null"
-            android:text="Submit"
-            android:textAllCaps="false"
-            android:textColor="@color/function_button_text"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:backgroundTint="@null" />
+            <Button
+                android:id="@+id/buttonSubmitLog"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/bg_primary_button"
+                android:backgroundTint="@null"
+                android:text="Save log"
+                android:textAllCaps="false"
+                android:textColor="@color/function_button_text"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:backgroundTint="@null" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
