@@ -1,5 +1,5 @@
 // Team5
-// Author: 罗钰翔
+// @author: Luo Yuxiang
 
 package com.example.wellnessapp.ui.home
 
@@ -34,7 +34,6 @@ import kotlinx.coroutines.launch
 /**
  * Home screen for the SimpleWell Android app.
  *
- * Author: Member F
  */
 class HomeActivity : AppCompatActivity() {
 

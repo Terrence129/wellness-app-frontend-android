@@ -1,3 +1,6 @@
+// Team5
+// @author: Deng Yunke
+
 package com.example.wellnessapp.ui.summary
 
 import android.app.Application
@@ -13,7 +16,6 @@ import kotlinx.coroutines.launch
 /**
  * Manages weekly wellness summary data and screen state.
  *
- * @author Yunke Deng
  */
 class WeeklySummaryViewModel(
     application: Application

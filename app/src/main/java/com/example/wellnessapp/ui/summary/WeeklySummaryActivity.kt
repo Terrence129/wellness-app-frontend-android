@@ -1,3 +1,6 @@
+// Team5
+// @author: Deng Yunke
+
 package com.example.wellnessapp.ui.summary
 
 import android.graphics.drawable.GradientDrawable
@@ -29,7 +32,6 @@ import kotlinx.coroutines.launch
 /**
  * Displays the authenticated user's weekly wellness summary.
  *
- * @author Yunke Deng
  */
 class WeeklySummaryActivity : AppCompatActivity() {
 

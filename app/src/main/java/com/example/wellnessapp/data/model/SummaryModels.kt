@@ -1,9 +1,11 @@
+// Team5
+// @author: Deng Yunke
+
 package com.example.wellnessapp.data.model
 
 /**
  * Weekly wellness summary returned by the backend.
  *
- * @author Yunke Deng
  */
 data class WeeklySummaryResponse(
     val startDate: String? = null,

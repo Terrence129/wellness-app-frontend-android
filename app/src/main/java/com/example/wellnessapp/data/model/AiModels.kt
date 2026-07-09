@@ -1,9 +1,11 @@
+// Team5
+// @author: Deng Yunke
+
 package com.example.wellnessapp.data.model
 
 /**
  * Request for generating AI wellness advice.
  *
- * @author Yunke Deng
  */
 data class AiAdviceRequest(
     val startDate: String,
@@ -13,7 +15,6 @@ data class AiAdviceRequest(
 /**
  * AI wellness advice returned by the backend.
  *
- * @author Yunke Deng
  */
 data class AiAdviceResponse(
     val id: Long? = null,
@@ -31,7 +32,6 @@ data class AiAdviceResponse(
  * The first request may use a null conversationId.
  * Later requests should reuse the returned conversationId.
  *
- * @author Yunke Deng
  */
 data class ChatRequest(
     val conversationId: String? = null,
@@ -41,7 +41,6 @@ data class ChatRequest(
 /**
  * One message returned in the chatbot conversation history.
  *
- * @author Yunke Deng
  */
 data class ChatMessageResponse(
     val role: String,
@@ -65,7 +64,6 @@ data class ChatConversationResponse(
 /**
  * Chatbot response returned by the Spring Boot backend.
  *
- * @author Yunke Deng
  */
 data class ChatResponse(
     val conversationId: String = "",

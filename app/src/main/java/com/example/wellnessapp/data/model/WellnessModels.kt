@@ -1,3 +1,6 @@
+// Team5
+// @author: Chen Chen
+
 package com.example.wellnessapp.data.model
 
 data class WellnessLogRequest(

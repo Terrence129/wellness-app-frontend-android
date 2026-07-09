@@ -1,3 +1,6 @@
+// Team5
+// @author: Deng Yunke
+
 package com.example.wellnessapp.ui.ai
 
 import android.content.Intent
@@ -20,7 +23,6 @@ import com.example.wellnessapp.R
 /**
  * Displays the wellness chatbot conversation.
  *
- * @author Yunke Deng
  */
 class ChatbotActivity : AppCompatActivity() {
 

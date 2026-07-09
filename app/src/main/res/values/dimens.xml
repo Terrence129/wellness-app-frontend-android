@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Team5
+     @author: Deng Yunke -->
 <resources>
     <dimen name="home_horizontal_padding_total">36dp</dimen>
     <dimen name="pinned_card_gap">12dp</dimen>

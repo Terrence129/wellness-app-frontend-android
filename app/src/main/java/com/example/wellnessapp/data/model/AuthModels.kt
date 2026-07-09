@@ -1,3 +1,6 @@
+// Team5
+// @author: Lei Tianyou
+
 package com.example.wellnessapp.data.model
 
 data class RegisterRequest(

@@ -1,5 +1,5 @@
 // Team5
-// Author: 罗钰翔
+// @author: Luo Yuxiang
 
 package com.example.wellnessapp.ui.history
 
@@ -32,7 +32,6 @@ import java.util.TimeZone
 /**
  * Shows the user's historical wellness logs.
  *
- * Author: Member F
  */
 class HistoryActivity : AppCompatActivity() {
 

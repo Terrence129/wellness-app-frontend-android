@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Team5
-     Author: 罗钰翔 -->
+     @author: Deng Yunke -->
 <resources>
     <string name="home_welcome_format">Welcome, %1$s</string>
     <string name="home_no_log_today">No wellness log for today yet.</string>

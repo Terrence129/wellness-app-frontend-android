@@ -1,5 +1,5 @@
 // Team5
-// Author: 罗钰翔
+// @author: Luo Yuxiang
 
 package com.example.wellnessapp.ui.history
 
@@ -18,7 +18,6 @@ import java.util.Locale
 /**
  * Shows one wellness log selected from History.
  *
- * Author: Member F
  */
 class WellnessLogDetailActivity : AppCompatActivity() {
 

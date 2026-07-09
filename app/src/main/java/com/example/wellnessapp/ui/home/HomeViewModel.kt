@@ -1,5 +1,5 @@
 // Team5
-// Author: 罗钰翔
+// @author: Luo Yuxiang
 
 package com.example.wellnessapp.ui.home
 
@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 /**
  * Loads the current user and today's wellness log for the home screen.
  *
- * Author: Member F
  */
 class HomeViewModel(
     private val userRepository: UserRepository,
@@ -77,7 +76,6 @@ class HomeViewModel(
     }
 
     /**
-     * Author: Member F
      */
     class Factory(
         private val userRepository: UserRepository,

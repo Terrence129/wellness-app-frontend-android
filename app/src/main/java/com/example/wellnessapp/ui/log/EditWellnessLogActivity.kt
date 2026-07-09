@@ -1,5 +1,6 @@
 // Team5
-// Author: Chen Chen
+// @author: Chen Chen
+
 package com.example.wellnessapp.ui.log
 
 import android.app.AlertDialog

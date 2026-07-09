@@ -1,3 +1,6 @@
+// Team5
+// @author: Wu Aomo
+
 package com.example.wellnessapp.ui.navigation
 
 import android.app.Activity

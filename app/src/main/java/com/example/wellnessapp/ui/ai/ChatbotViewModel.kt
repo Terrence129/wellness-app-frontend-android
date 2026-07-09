@@ -1,3 +1,6 @@
+// Team5
+// @author: Deng Yunke
+
 package com.example.wellnessapp.ui.ai
 
 import android.app.Application
@@ -17,7 +20,6 @@ import java.io.IOException
 /**
  * Manages chatbot messages, conversation state and API requests.
  *
- * @author Yunke Deng
  */
 class ChatbotViewModel(
     application: Application

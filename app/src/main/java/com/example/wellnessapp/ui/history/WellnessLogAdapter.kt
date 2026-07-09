@@ -1,5 +1,5 @@
 // Team5
-// Author: 罗钰翔
+// @author: Luo Yuxiang
 
 package com.example.wellnessapp.ui.history
 
@@ -16,7 +16,6 @@ import java.util.Locale
 /**
  * RecyclerView adapter for wellness history records.
  *
- * Author: Member F
  */
 class WellnessLogAdapter(
     private val onItemClick: (WellnessLogResponse) -> Unit,
@@ -45,7 +44,6 @@ class WellnessLogAdapter(
     override fun getItemCount(): Int = logs.size
 
     /**
-     * Author: Member F
      */
     class WellnessLogViewHolder(
         itemView: View,

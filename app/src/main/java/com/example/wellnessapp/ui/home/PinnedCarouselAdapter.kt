@@ -1,5 +1,5 @@
 // Team5
-// Author: 罗钰翔
+// @author: Luo Yuxiang
 
 package com.example.wellnessapp.ui.home
 
@@ -17,7 +17,6 @@ import kotlin.math.roundToInt
 /**
  * Renders the pinned carousel on the home screen.
  *
- * Author: Member F
  */
 class PinnedCarouselAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

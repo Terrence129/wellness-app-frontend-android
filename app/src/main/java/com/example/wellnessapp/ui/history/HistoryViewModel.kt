@@ -1,5 +1,5 @@
 // Team5
-// Author: 罗钰翔
+// @author: Luo Yuxiang
 
 package com.example.wellnessapp.ui.history
 
@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 /**
  * Loads wellness history records for the History screen.
  *
- * Author: Member F
  */
 class HistoryViewModel(
     private val wellnessRepository: WellnessRepository
@@ -52,7 +51,6 @@ class HistoryViewModel(
     }
 
     /**
-     * Author: Member F
      */
     class Factory(
         private val wellnessRepository: WellnessRepository

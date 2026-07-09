@@ -1,6 +1,7 @@
+// Team5
+// @author: Lei Tianyou
+
 /*
- * Author: Lei Tianyou
- * Role: Member D
  * Scope: Login and registration flow
  */
 

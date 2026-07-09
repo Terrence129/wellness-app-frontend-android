@@ -1,3 +1,6 @@
+// Team5
+// @author: Deng Yunke
+
 package com.example.wellnessapp.ui.ai
 
 import android.view.LayoutInflater
@@ -11,7 +14,6 @@ import com.example.wellnessapp.data.model.ChatMessageResponse
 /**
  * Displays user and assistant message bubbles.
  *
- * @author Yunke Deng
  */
 class ChatMessageAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

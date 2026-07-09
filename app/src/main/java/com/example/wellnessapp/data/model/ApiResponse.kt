@@ -1,3 +1,6 @@
+// Team5
+// @author: Wu Aomo
+
 package com.example.wellnessapp.data.model
 
 data class ApiResponse<T>(

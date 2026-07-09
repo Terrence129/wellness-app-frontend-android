@@ -1,3 +1,6 @@
+// Team5
+// @author: Deng Yunke
+
 package com.example.wellnessapp.ui.ai
 
 import android.content.Intent
@@ -19,7 +22,6 @@ import java.util.Locale
 /**
  * Displays and generates personalised AI wellness advice.
  *
- * @author Yunke Deng
  */
 class AiAdviceActivity : AppCompatActivity() {
 

@@ -1,3 +1,6 @@
+// Team5
+// @author: Deng Yunke
+
 package com.example.wellnessapp.ui.ai
 
 import android.app.Application
@@ -18,7 +21,6 @@ import java.io.IOException
 /**
  * Manages AI wellness advice requests and UI state.
  *
- * @author Yunke Deng
  */
 class AiAdviceViewModel(
     application: Application
