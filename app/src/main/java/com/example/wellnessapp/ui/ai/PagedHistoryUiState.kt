@@ -1,3 +1,5 @@
+// Author: chenyaqi
+
 package com.example.wellnessapp.ui.ai
 
 data class PagedHistoryUiState<T>(
