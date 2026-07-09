@@ -28,41 +28,68 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_card_subtle"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="4dp">
+        android:orientation="vertical"
+        android:padding="0dp">
 
-        <Button
-            android:id="@+id/btnModeAdvice"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bg_segment_selected"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:text="Advice"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:backgroundTint="@null" />
+        <LinearLayout
+            android:id="@+id/cardAdvice"
+            android:layout_width="match_parent"
+            android:layout_height="86dp"
+            android:background="@drawable/bg_card"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="14dp">
 
-        <Button
-            android:id="@+id/btnModeChat"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="6dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_segment_unselected"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:text="Chat"
-            android:textAllCaps="false"
-            android:textColor="@color/health_text_secondary"
-            android:textSize="14sp"
-            app:backgroundTint="@null" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Advice"
+                android:textColor="@color/health_text_primary"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Generate and review wellness suggestions"
+                android:textColor="@color/health_text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cardChatbot"
+            android:layout_width="match_parent"
+            android:layout_height="86dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_card_subtle"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chatbot"
+                android:textColor="@color/health_text_primary"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Ask questions and continue conversations"
+                android:textColor="@color/health_text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <FrameLayout

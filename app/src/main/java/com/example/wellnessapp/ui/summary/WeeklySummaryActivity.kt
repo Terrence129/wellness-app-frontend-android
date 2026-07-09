@@ -10,6 +10,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.wellnessapp.R
 import com.example.wellnessapp.data.model.WeeklySummaryResponse
+import com.example.wellnessapp.ui.navigation.BottomNavigationController
+import com.example.wellnessapp.ui.navigation.BottomNavigationController.ActiveItem
 import com.example.wellnessapp.util.UiState
 import java.util.Locale
 
@@ -39,6 +41,7 @@ class WeeklySummaryActivity : AppCompatActivity() {
         bindViews()
         prepareDefaultDateRange()
         observeSummaryState()
+        BottomNavigationController.attach(this, ActiveItem.TRENDS_HISTORY)
 
         findViewById<View>(R.id.btnBack).setOnClickListener {
             finish()

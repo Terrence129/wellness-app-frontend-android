@@ -179,39 +179,5 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnEditLog"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_primary_button"
-                android:backgroundTint="@null"
-                android:text="Edit"
-                android:textAllCaps="false"
-                android:textColor="@color/function_button_text"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:backgroundTint="@null" />
-
-            <Button
-                android:id="@+id/btnDeleteLog"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_danger_outline_button"
-                android:backgroundTint="@null"
-                android:text="Delete"
-                android:textAllCaps="false"
-                android:textColor="#FF3B30"
-                android:textSize="15sp"
-                app:backgroundTint="@null" />
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>

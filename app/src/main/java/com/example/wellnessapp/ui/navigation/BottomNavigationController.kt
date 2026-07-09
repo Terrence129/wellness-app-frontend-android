@@ -14,10 +14,8 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
 import com.example.wellnessapp.R
 import com.example.wellnessapp.ui.ai.AiCoachActivity
-import com.example.wellnessapp.ui.history.HistoryActivity
 import com.example.wellnessapp.ui.home.HomeActivity
 import com.example.wellnessapp.ui.log.AddWellnessLogActivity
-import com.example.wellnessapp.ui.summary.WeeklySummaryActivity
 
 /**
  * Adds the app's persistent bottom navigation to authenticated screens.
@@ -26,9 +24,8 @@ object BottomNavigationController {
 
     enum class ActiveItem {
         HOME,
-        TRENDS,
+        TRENDS_HISTORY,
         ADD,
-        HISTORY,
         AI
     }
 
@@ -88,12 +85,12 @@ object BottomNavigationController {
         bottomNavigation.addView(
             navItem(
                 activity = activity,
-                label = "Trends",
-                iconRes = R.drawable.ic_nav_trends,
-                selected = activeItem == ActiveItem.TRENDS
+                label = "Trends\nHistory",
+                iconRes = R.drawable.ic_nav_calendar,
+                selected = activeItem == ActiveItem.TRENDS_HISTORY
             ) {
-                if (activeItem != ActiveItem.TRENDS) {
-                    activity.openTopLevel(WeeklySummaryActivity::class.java)
+                if (activeItem != ActiveItem.TRENDS_HISTORY) {
+                    activity.openTopLevel(TrendsHistoryActivity::class.java)
                 }
             }
         )
@@ -118,18 +115,6 @@ object BottomNavigationController {
                         }
                     }
                 )
-            }
-        )
-        bottomNavigation.addView(
-            navItem(
-                activity = activity,
-                label = "History",
-                iconRes = R.drawable.ic_nav_history,
-                selected = activeItem == ActiveItem.HISTORY
-            ) {
-                if (activeItem != ActiveItem.HISTORY) {
-                    activity.openTopLevel(HistoryActivity::class.java)
-                }
             }
         )
         bottomNavigation.addView(
@@ -186,6 +171,7 @@ object BottomNavigationController {
                     ).apply {
                         topMargin = activity.dp(2)
                     }
+                    gravity = Gravity.CENTER
                     text = label
                     setTextColor(tint)
                     textSize = 11f

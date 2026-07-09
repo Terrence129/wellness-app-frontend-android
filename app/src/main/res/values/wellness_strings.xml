@@ -34,6 +34,7 @@
     <string name="exercise_minutes_format">Exercise: %1$s min</string>
     <string name="delete_log_title">Delete wellness log?</string>
     <string name="delete_log_message">This record will be removed from your history.</string>
+    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
 </resources>

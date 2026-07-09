@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wellnessapp.R
 import com.example.wellnessapp.data.model.AiAdviceResponse
+import com.example.wellnessapp.ui.navigation.BottomNavigationController
+import com.example.wellnessapp.ui.navigation.BottomNavigationController.ActiveItem
 import com.example.wellnessapp.util.UiState
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -32,8 +34,8 @@ class AiCoachActivity : AppCompatActivity() {
     private val adviceViewModel: AiAdviceViewModel by viewModels()
     private val chatViewModel: ChatbotViewModel by viewModels()
 
-    private lateinit var adviceModeButton: Button
-    private lateinit var chatModeButton: Button
+    private lateinit var adviceModeCard: View
+    private lateinit var chatModeCard: View
     private lateinit var advicePanel: ScrollView
     private lateinit var chatPanel: LinearLayout
     private lateinit var requestedRangeText: TextView
@@ -89,6 +91,7 @@ class AiCoachActivity : AppCompatActivity() {
         observeAdviceHistoryState()
         observeChatState()
         observeChatHistoryState()
+        BottomNavigationController.attach(this, ActiveItem.AI)
 
         adviceViewModel.loadLatestAdvice()
         adviceViewModel.loadAdviceHistory()
@@ -96,8 +99,8 @@ class AiCoachActivity : AppCompatActivity() {
     }
 
     private fun bindViews() {
-        adviceModeButton = findViewById(R.id.btnModeAdvice)
-        chatModeButton = findViewById(R.id.btnModeChat)
+        adviceModeCard = findViewById(R.id.cardAdvice)
+        chatModeCard = findViewById(R.id.cardChatbot)
         advicePanel = findViewById(R.id.advicePanel)
         chatPanel = findViewById(R.id.chatPanel)
         requestedRangeText = findViewById(R.id.tvRequestedRange)
@@ -217,11 +220,11 @@ class AiCoachActivity : AppCompatActivity() {
             finish()
         }
 
-        adviceModeButton.setOnClickListener {
+        adviceModeCard.setOnClickListener {
             showAdviceMode()
         }
 
-        chatModeButton.setOnClickListener {
+        chatModeCard.setOnClickListener {
             showChatMode()
         }
 
@@ -355,19 +358,15 @@ class AiCoachActivity : AppCompatActivity() {
     private fun showAdviceMode() {
         advicePanel.visibility = View.VISIBLE
         chatPanel.visibility = View.GONE
-        adviceModeButton.setBackgroundResource(R.drawable.bg_segment_selected)
-        adviceModeButton.setTextColor(getColor(R.color.white))
-        chatModeButton.setBackgroundResource(R.drawable.bg_segment_unselected)
-        chatModeButton.setTextColor(getColor(R.color.health_text_secondary))
+        adviceModeCard.setBackgroundResource(R.drawable.bg_card)
+        chatModeCard.setBackgroundResource(R.drawable.bg_card_subtle)
     }
 
     private fun showChatMode() {
         advicePanel.visibility = View.GONE
         chatPanel.visibility = View.VISIBLE
-        adviceModeButton.setBackgroundResource(R.drawable.bg_segment_unselected)
-        adviceModeButton.setTextColor(getColor(R.color.health_text_secondary))
-        chatModeButton.setBackgroundResource(R.drawable.bg_segment_selected)
-        chatModeButton.setTextColor(getColor(R.color.white))
+        adviceModeCard.setBackgroundResource(R.drawable.bg_card_subtle)
+        chatModeCard.setBackgroundResource(R.drawable.bg_card)
     }
 
     private fun observeAdviceState() {
